@@ -1,0 +1,935 @@
+{
+  "schemaVersion": 1,
+  "interfaces": [
+    {
+      "operation": "device.asset.delete_images",
+      "http_method": "POST",
+      "path": "/v1/common/w/deletePics",
+      "runtime_path": "/apis/iot/v1/common/w/deletePics",
+      "operation_title": "删除图片资源",
+      "title": "批量删除图片",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "device.asset.text_to_image",
+      "http_method": "POST",
+      "path": "/v1/common/r/{pid}/textToImage",
+      "runtime_path": "/apis/iot/v1/common/r/{pid}/textToImage",
+      "operation_title": "文字转图片",
+      "title": "文字转图片",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "device.asset.upload_image",
+      "http_method": "POST",
+      "path": "/v1/common/w/uploadPic",
+      "runtime_path": "/apis/iot/v1/common/w/uploadPic",
+      "operation_title": "上传图片资源",
+      "title": "图片上传接口",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "device.attribute.update",
+      "http_method": "POST",
+      "path": "/v1/node/{nodeType}/{deviceId}/w/update-attr",
+      "runtime_path": "/apis/iot/v1/node/{nodeType}/{deviceId}/w/update-attr",
+      "operation_title": "更新节点拓扑属性",
+      "title": "更新拓扑配置",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "路径形状命中"
+    },
+    {
+      "operation": "device.effect.run_flow",
+      "http_method": "POST",
+      "path": "/v1/thing/device/{nodeType}/{resId}/w/flow",
+      "runtime_path": "/apis/iot/v1/thing/device/{nodeType}/{resId}/w/flow",
+      "operation_title": "执行流光效果",
+      "title": "执行流光",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "device.property.set",
+      "http_method": "POST",
+      "path": "/v2/thing/control/{nodeType}/{resId}/w/properties/{propertyName}",
+      "runtime_path": "/apis/iot/v2/thing/control/{nodeType}/{resId}/w/properties/{propertyName}",
+      "operation_title": "设置设备属性",
+      "title": "设置属性值：单控",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "路径形状命中"
+    },
+    {
+      "operation": "device.raw_command.send",
+      "http_method": "POST",
+      "path": "/v1/transmission/w/send",
+      "runtime_path": "/apis/iot/v1/transmission/w/send",
+      "operation_title": "向设备发送原始指令",
+      "title": "向设备发送指令",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "device.relation.list_devices",
+      "http_method": "POST",
+      "path": "/v1/node/r/{resType}/{resId}/device",
+      "runtime_path": "/apis/iot/v1/node/r/{resType}/{resId}/device",
+      "operation_title": "按资源查询设备",
+      "title": "获取指定类型下所有设备",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "device.schema.get_by_pid",
+      "http_method": "POST",
+      "path": "/v1/thing/schema/r/{pid}",
+      "runtime_path": "/apis/iot/v1/thing/schema/r/{pid}",
+      "operation_title": "按 PID 获取物模型",
+      "title": "根据产品id获取用户可见模型定义",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "路径命中但方法不一致"
+    },
+    {
+      "operation": "device.screen.pre_bind",
+      "http_method": "POST",
+      "path": "/v1/device/screen/w/pre-bind",
+      "runtime_path": "/apis/iot/v1/device/screen/w/pre-bind",
+      "operation_title": "Wi-Fi 屏预绑定",
+      "title": "wifi屏预绑定",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "device.slot.delete",
+      "http_method": "POST",
+      "path": "/v1/device/{slotId}/w/delete",
+      "runtime_path": "/apis/iot/v1/device/{slotId}/w/delete",
+      "operation_title": "删除设备",
+      "title": "设备删除",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "路径形状命中"
+    },
+    {
+      "operation": "device.slot.get_detail",
+      "http_method": "POST",
+      "path": "/v1/device/{slotId}/r/detail",
+      "runtime_path": "/apis/iot/v1/device/{slotId}/r/detail",
+      "operation_title": "设备详情查询",
+      "title": "获取设备详情",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "路径形状命中"
+    },
+    {
+      "operation": "device.storage.get",
+      "http_method": "POST",
+      "path": "/v1/common/r/queryStorage",
+      "runtime_path": "/apis/iot/v1/common/r/queryStorage",
+      "operation_title": "查询设备业务存储",
+      "title": "查询设备存储信息",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "device.storage.set",
+      "http_method": "POST",
+      "path": "/v1/common/w/storage",
+      "runtime_path": "/apis/iot/v1/common/w/storage",
+      "operation_title": "写入设备业务存储",
+      "title": "设备信息存储接口",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "panel.button.get_info",
+      "http_method": "POST",
+      "path": "/v1/panel/r/button/info/{deviceId}",
+      "runtime_path": "/apis/iot/v1/panel/r/button/info/{deviceId}",
+      "operation_title": "查询按键信息",
+      "title": "getButtonDetail",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "未命中"
+    },
+    {
+      "operation": "panel.button.update_layout",
+      "http_method": "POST",
+      "path": "/v1/panel/w/button/update/{deviceId}",
+      "runtime_path": "/apis/iot/v1/panel/w/button/update/{deviceId}",
+      "operation_title": "更新面板按键布局",
+      "title": "更新面板配置",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "panel.button_event.batch_update",
+      "http_method": "POST",
+      "path": "/v1/panel/w/button/event/update/batch",
+      "runtime_path": "/apis/iot/v1/panel/w/button/event/update/batch",
+      "operation_title": "批量更新按键动作",
+      "title": "批量更新面板按键动作",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "panel.button_event.reset",
+      "http_method": "POST",
+      "path": "/v1/panel/w/button/event/{buttonEventId}/reset",
+      "runtime_path": "/apis/iot/v1/panel/w/button/event/{buttonEventId}/reset",
+      "operation_title": "重置按键动作",
+      "title": "重置面板按键动作",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "panel.button_event.update",
+      "http_method": "POST",
+      "path": "/v1/panel/w/button/event/update",
+      "runtime_path": "/apis/iot/v1/panel/w/button/event/update",
+      "operation_title": "更新按键动作",
+      "title": "更新面板按键动作",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "panel.panel.get_detail",
+      "http_method": "POST",
+      "path": "/v1/panel/r/detail/{deviceID}",
+      "runtime_path": "/apis/iot/v1/panel/r/detail/{deviceID}",
+      "operation_title": "查询面板详情",
+      "title": "查询面板详情",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "路径命中但方法不一致"
+    },
+    {
+      "operation": "knob.multi.get_detail",
+      "http_method": "GET",
+      "path": "/v1/multi-knob/{deviceID}/detail",
+      "runtime_path": "/apis/iot/v1/multi-knob/{deviceID}/detail",
+      "operation_title": "查询多键旋钮详情",
+      "title": "获取旋钮开关详情(新)",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "路径命中但方法不一致"
+    },
+    {
+      "operation": "knob.multi.reset",
+      "http_method": "POST",
+      "path": "/v1/multi-knob/{deviceId}/{index}/reset",
+      "runtime_path": "/apis/iot/v1/multi-knob/{deviceId}/{index}/reset",
+      "operation_title": "重置多键旋钮",
+      "title": "重置旋钮开关(新)",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "knob.multi.update",
+      "http_method": "POST",
+      "path": "/v1/multi-knob/update",
+      "runtime_path": "/apis/iot/v1/multi-knob/update",
+      "operation_title": "更新多键旋钮配置",
+      "title": "更新旋钮配置(新)",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "knob.single.get_detail",
+      "http_method": "GET",
+      "path": "/v1/knobs/{deviceID}/detail",
+      "runtime_path": "/apis/iot/v1/knobs/{deviceID}/detail",
+      "operation_title": "查询旋钮详情",
+      "title": "获取旋钮详情",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "路径形状命中"
+    },
+    {
+      "operation": "knob.single.reset",
+      "http_method": "POST",
+      "path": "/v1/knobs/{deviceId}/reset",
+      "runtime_path": "/apis/iot/v1/knobs/{deviceId}/reset",
+      "operation_title": "重置旋钮",
+      "title": "重置旋钮开关",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "knob.single.update",
+      "http_method": "POST",
+      "path": "/v1/knobs/update",
+      "runtime_path": "/apis/iot/v1/knobs/update",
+      "operation_title": "更新旋钮配置",
+      "title": "更新旋钮配置",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "automation.capability.list",
+      "http_method": "POST",
+      "path": "/v1/automations/r/supported",
+      "runtime_path": "/apis/iot/v1/automations/r/supported",
+      "operation_title": "查询设备支持的自动化能力",
+      "title": "获取设备支持的自动化",
+      "source_type": "APP 依赖库封装 + YApi/Controller 补充",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "automation.capability.list_v2",
+      "http_method": "POST",
+      "path": "/v1/automations/r/supported/v2",
+      "runtime_path": "/apis/iot/v1/automations/r/supported/v2",
+      "operation_title": "查询设备支持的自动化能力 V2",
+      "title": "获取设备支持的自动化v2",
+      "source_type": "APP 依赖库封装 + YApi/Controller 补充",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "automation.legacy_rule.batch_delete",
+      "http_method": "POST",
+      "path": "/v1/rule/w/multidelete",
+      "runtime_path": "/apis/iot/v1/rule/w/multidelete",
+      "operation_title": "批量删除规则",
+      "title": "批量删除规则",
+      "source_type": "APP 依赖库封装 + YApi/Controller 补充",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "automation.legacy_rule.create",
+      "http_method": "POST",
+      "path": "/v1/rule/w/insert",
+      "runtime_path": "/apis/iot/v1/rule/w/insert",
+      "operation_title": "新增规则",
+      "title": "新增规则",
+      "source_type": "APP 依赖库封装 + YApi/Controller 补充",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "automation.legacy_rule.delete",
+      "http_method": "POST",
+      "path": "/v1/rule/{id}/w/delete",
+      "runtime_path": "/apis/iot/v1/rule/{id}/w/delete",
+      "operation_title": "删除规则",
+      "title": "删除规则",
+      "source_type": "APP 依赖库封装 + YApi/Controller 补充",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "automation.legacy_rule.list",
+      "http_method": "POST",
+      "path": "/v1/rule/r/list",
+      "runtime_path": "/apis/iot/v1/rule/r/list",
+      "operation_title": "查询家庭下规则",
+      "title": "获取家庭下规则",
+      "source_type": "APP 依赖库封装 + YApi/Controller 补充",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "automation.legacy_rule.update",
+      "http_method": "POST",
+      "path": "/v1/rule/{id}/w/update",
+      "runtime_path": "/apis/iot/v1/rule/{id}/w/update",
+      "operation_title": "更新规则",
+      "title": "更新规则",
+      "source_type": "APP 依赖库封装 + YApi/Controller 补充",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "automation.rule.create",
+      "http_method": "POST",
+      "path": "/v1/automations/w/insert",
+      "runtime_path": "/apis/iot/v1/automations/w/insert",
+      "operation_title": "新建自动化",
+      "title": "新建自动化",
+      "source_type": "APP 依赖库封装 + YApi/Controller 补充",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "automation.rule.delete",
+      "http_method": "DELETE",
+      "path": "/v1/automations/{id}/w/delete",
+      "runtime_path": "/apis/iot/v1/automations/{id}/w/delete",
+      "operation_title": "删除自动化",
+      "title": "删除自动化",
+      "source_type": "APP 依赖库封装 + YApi/Controller 补充",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "automation.rule.disable",
+      "http_method": "POST",
+      "path": "/v1/automations/w/disable/{id}",
+      "runtime_path": "/apis/iot/v1/automations/w/disable/{id}",
+      "operation_title": "禁用自动化",
+      "title": "禁用自动化",
+      "source_type": "APP 依赖库封装 + YApi/Controller 补充",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "automation.rule.enable",
+      "http_method": "POST",
+      "path": "/v1/automations/w/enable/{id}",
+      "runtime_path": "/apis/iot/v1/automations/w/enable/{id}",
+      "operation_title": "启用自动化",
+      "title": "启用自动化",
+      "source_type": "APP 依赖库封装 + YApi/Controller 补充",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "automation.rule.list",
+      "http_method": "POST",
+      "path": "/v1/automations/r/list",
+      "runtime_path": "/apis/iot/v1/automations/r/list",
+      "operation_title": "查询自动化列表",
+      "title": "获取自动化列表",
+      "source_type": "APP 依赖库封装 + YApi/Controller 补充",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "automation.rule.page",
+      "http_method": "GET",
+      "path": "/v1/automations/{houseId}/r/list/{pageNo}/{pageSize}",
+      "runtime_path": "/apis/iot/v1/automations/{houseId}/r/list/{pageNo}/{pageSize}",
+      "operation_title": "分页查询自动化列表",
+      "title": "分页获取自动化列表",
+      "source_type": "APP 依赖库封装 + YApi/Controller 补充",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "automation.rule.test",
+      "http_method": "POST",
+      "path": "/v1/automations/w/test",
+      "runtime_path": "/apis/iot/v1/automations/w/test",
+      "operation_title": "测试自动化",
+      "title": "测试自动化",
+      "source_type": "APP 依赖库封装 + YApi/Controller 补充",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "automation.rule.update",
+      "http_method": "PUT",
+      "path": "/v1/automations/{id}/w/update",
+      "runtime_path": "/apis/iot/v1/automations/{id}/w/update",
+      "operation_title": "更新自动化",
+      "title": "更新自动化",
+      "source_type": "APP 依赖库封装 + YApi/Controller 补充",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "house.device_lock.lock_all",
+      "http_method": "POST",
+      "path": "/v1/house/{houseId}/lockall",
+      "runtime_path": "/apis/iot/v1/house/{houseId}/lockall",
+      "operation_title": "锁定家庭设备",
+      "title": "家庭锁定",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "house.device_lock.unlock_all",
+      "http_method": "POST",
+      "path": "/v1/house/{houseId}/unlockall",
+      "runtime_path": "/apis/iot/v1/house/{houseId}/unlockall",
+      "operation_title": "解锁家庭设备",
+      "title": "家庭解锁",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "house.member.get_current",
+      "http_method": "POST",
+      "path": "/v1/house/r/memberinfoV2",
+      "runtime_path": "/apis/iot/v1/house/r/memberinfoV2",
+      "operation_title": "查询当前成员信息",
+      "title": "获取家庭下当前用户成员信息",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "house.member.list",
+      "http_method": "POST",
+      "path": "/v1/house/r/memberlistV2",
+      "runtime_path": "/apis/iot/v1/house/r/memberlistV2",
+      "operation_title": "查询家庭成员列表",
+      "title": "取家庭下所有成员信息",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "house.member.remove",
+      "http_method": "POST",
+      "path": "/v1/house/w/remove",
+      "runtime_path": "/apis/iot/v1/house/w/remove",
+      "operation_title": "移除家庭成员",
+      "title": "管理员移除某个分享的用户",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "house.member.search",
+      "http_method": "POST",
+      "path": "/v1/house/r/searchinfo",
+      "runtime_path": "/apis/iot/v1/house/r/searchinfo",
+      "operation_title": "搜索可分享用户",
+      "title": "searchinfo",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "未命中"
+    },
+    {
+      "operation": "house.member.update_role",
+      "http_method": "POST",
+      "path": "/v1/house/w/updateUserRole",
+      "runtime_path": "/apis/iot/v1/house/w/updateUserRole",
+      "operation_title": "更新成员角色",
+      "title": "更新家庭下用户角色",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "house.membership.quit",
+      "http_method": "POST",
+      "path": "/v1/house/w/quit",
+      "runtime_path": "/apis/iot/v1/house/w/quit",
+      "operation_title": "退出家庭",
+      "title": "用户退出分享的家庭",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "house.ownership.transfer",
+      "http_method": "POST",
+      "path": "/v1/house/w/transfer",
+      "runtime_path": "/apis/iot/v1/house/w/transfer",
+      "operation_title": "转移家庭管理员",
+      "title": "管理员转移家庭管理员权限给成员",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "house.property.update",
+      "http_method": "PUT",
+      "path": "/v2/house/w/{houseId}/properties",
+      "runtime_path": "/apis/iot/v2/house/w/{houseId}/properties",
+      "operation_title": "更新家庭属性",
+      "title": "house属性维护",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "house.share.accept_barcode",
+      "http_method": "POST",
+      "path": "/v1/share/w/acceptbarcodeshare",
+      "runtime_path": "/apis/iot/v1/share/w/acceptbarcodeshare",
+      "operation_title": "接受扫码分享",
+      "title": "加入家庭，接受家庭分享",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "house.share.accept_invite",
+      "http_method": "POST",
+      "path": "/v1/share/{id}/w/accept",
+      "runtime_path": "/apis/iot/v1/share/{id}/w/accept",
+      "operation_title": "接受分享邀请",
+      "title": "acceptHouseShareByShareId",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "未命中"
+    },
+    {
+      "operation": "house.share.create_barcode",
+      "http_method": "POST",
+      "path": "/v1/share/r/housesharebarcode",
+      "runtime_path": "/apis/iot/v1/share/r/housesharebarcode",
+      "operation_title": "生成家庭分享码",
+      "title": "生成家庭分享码",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "house.share.list_history",
+      "http_method": "POST",
+      "path": "/v1/share/r/housesharehistory",
+      "runtime_path": "/apis/iot/v1/share/r/housesharehistory",
+      "operation_title": "查询分享历史",
+      "title": "getInvitedHistoryList",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "未命中"
+    },
+    {
+      "operation": "house.share.send_invite",
+      "http_method": "POST",
+      "path": "/v1/share/w/send",
+      "runtime_path": "/apis/iot/v1/share/w/send",
+      "operation_title": "发送分享邀请",
+      "title": "sendShareMessage",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "未命中"
+    },
+    {
+      "operation": "scene.execution.run",
+      "http_method": "POST",
+      "path": "/v1/controll/device/w/scene/{sceneId}",
+      "runtime_path": "/apis/iot/v1/controll/device/w/scene/{sceneId}",
+      "operation_title": "执行情景",
+      "title": "应用情景",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "路径形状命中"
+    },
+    {
+      "operation": "scene.relation.list_gateway_scenes",
+      "http_method": "POST",
+      "path": "/v1/scene/r/{gatewayId}/related/sceneId",
+      "runtime_path": "/apis/iot/v1/scene/r/{gatewayId}/related/sceneId",
+      "operation_title": "查询网关关联情景",
+      "title": "获取网关关联的情景",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "scene.sort.add",
+      "http_method": "POST",
+      "path": "/v1/sort/{houseId}/w/{type}/{target}/add",
+      "runtime_path": "/apis/iot/v1/sort/{houseId}/w/{type}/{target}/add",
+      "operation_title": "新增排序",
+      "title": "新增排序",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "scene.sort.list_room_scene",
+      "http_method": "POST",
+      "path": "/v1/sort/r/room/scene",
+      "runtime_path": "/apis/iot/v1/sort/r/room/scene",
+      "operation_title": "查询房间情景排序",
+      "title": "获取房间下情景排序",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "matter.pairing_code.apply",
+      "http_method": "POST",
+      "path": "/v1/matterdac/w/applyManualCode",
+      "runtime_path": "/apis/iot/v1/matterdac/w/applyManualCode",
+      "operation_title": "申请 Matter 配对码",
+      "title": "申请配对码",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "matter.product_config.list",
+      "http_method": "GET",
+      "path": "/v2/thing/schema/matter/r/infos",
+      "runtime_path": "/apis/iot/v2/thing/schema/matter/r/infos",
+      "operation_title": "查询 Matter 产品配置",
+      "title": "获取产品的matter配置",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "matter.secondary_pairing.apply",
+      "http_method": "GET",
+      "path": "/v1/matter/house/{houseId}/r/secondaryPairing/{nodeId}/apply",
+      "runtime_path": "/apis/iot/v1/matter/house/{houseId}/r/secondaryPairing/{nodeId}/apply",
+      "operation_title": "申请二次配对",
+      "title": "matter申请二次配对",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "matter.secondary_pairing.cancel",
+      "http_method": "POST",
+      "path": "/v1/matter/house/{houseId}/r/secondaryPairing/{nodeId}/cancel",
+      "runtime_path": "/apis/iot/v1/matter/house/{houseId}/r/secondaryPairing/{nodeId}/cancel",
+      "operation_title": "取消二次配对",
+      "title": "matter申请二次配对取消",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "matter.secondary_pairing.get_progress",
+      "http_method": "POST",
+      "path": "/v1/matter/house/{houseId}/r/secondaryPairing/{nodeId}/progress",
+      "runtime_path": "/apis/iot/v1/matter/house/{houseId}/r/secondaryPairing/{nodeId}/progress",
+      "operation_title": "查询二次配对进度",
+      "title": "matter申请二次配对进度查询",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "ai.asr.get_temp_credential",
+      "http_method": "POST",
+      "path": "/v1/asr/temp_credential",
+      "runtime_path": "/apis/iot/v1/asr/temp_credential",
+      "operation_title": "获取 ASR 临时凭证",
+      "title": "获取凭证",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "ai.control_node.list",
+      "http_method": "POST",
+      "path": "/v1/ai/{houseId}/control/r/info",
+      "runtime_path": "/apis/iot/v1/ai/{houseId}/control/r/info",
+      "operation_title": "查询语音服务可控节点",
+      "title": "查询屏控制设备列表",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "ai.control_node.update",
+      "http_method": "POST",
+      "path": "/v1/ai/{houseId}/control/w/update",
+      "runtime_path": "/apis/iot/v1/ai/{houseId}/control/w/update",
+      "operation_title": "更新语音服务可控节点",
+      "title": "添加屏控制设备",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "ai.name.batch_update",
+      "http_method": "PUT",
+      "path": "/v1/ai/{houseId}/name/w/modify",
+      "runtime_path": "/apis/iot/v1/ai/{houseId}/name/w/modify",
+      "operation_title": "批量更新 AI 优化名称",
+      "title": "更新家庭下设备/情景的名称--用于AI改名",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "ai.name.recommend_device",
+      "http_method": "POST",
+      "path": "/apis/panel7_assistant/v1/device_name/recommend",
+      "runtime_path": "/apis/panel7_assistant/v1/device_name/recommend",
+      "operation_title": "推荐设备名称",
+      "title": "设备名称推荐",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "ai.name.recommend_scene",
+      "http_method": "POST",
+      "path": "/apis/panel7_assistant/v1/scene_name/recommend",
+      "runtime_path": "/apis/panel7_assistant/v1/scene_name/recommend",
+      "operation_title": "推荐情景名称",
+      "title": "getAiOptimizeSceneNames",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "未命中"
+    },
+    {
+      "operation": "ai.voice_product.list",
+      "http_method": "GET",
+      "path": "/v1/ai/voice/product/r/list",
+      "runtime_path": "/apis/iot/v1/ai/voice/product/r/list",
+      "operation_title": "查询语音服务 PID 列表",
+      "title": "支持语音识别的pid列表",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "upgrade.app.get_latest",
+      "http_method": "POST",
+      "path": "/v1/appupgrade/r/latestfile",
+      "runtime_path": "/apis/iot/v1/appupgrade/r/latestfile",
+      "operation_title": "查询 APP 最新版本",
+      "title": "查询最新app升级版本",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "upgrade.device_stat.get_electricity",
+      "http_method": "POST",
+      "path": "/apis/d/v1/iot_device_params/get_device_summary_electricity",
+      "runtime_path": "/apis/d/v1/iot_device_params/get_device_summary_electricity",
+      "operation_title": "查询设备用电统计",
+      "title": "getDeviceElectricityConsumptionData",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "未命中"
+    },
+    {
+      "operation": "upgrade.ptx.list_devices",
+      "http_method": "POST",
+      "path": "/v1/third-party/ptx/device/r/list",
+      "runtime_path": "/apis/iot/v1/third-party/ptx/device/r/list",
+      "operation_title": "查询 D 寸屏支持设备",
+      "title": "D寸屏支持的设备列表",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "upgrade.ptx.list_ota_updates",
+      "http_method": "POST",
+      "path": "/v1/third-party/ptx/device/r/updateOtaList",
+      "runtime_path": "/apis/iot/v1/third-party/ptx/device/r/updateOtaList",
+      "operation_title": "查询 D 寸屏 OTA",
+      "title": "D寸屏 OTA升级",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "account.account.exists",
+      "http_method": "GET",
+      "path": "/apis/account/public/account/exist",
+      "runtime_path": "/apis/account/public/account/exist",
+      "operation_title": "检查账号是否存在",
+      "title": "getUserIsExist",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "未命中"
+    },
+    {
+      "operation": "account.scan_login.query_qrcode",
+      "http_method": "POST",
+      "path": "/apis/account/user/scan-login/query/qrcode/{device}",
+      "runtime_path": "/apis/account/user/scan-login/query/qrcode/{device}",
+      "operation_title": "创建扫码登录二维码",
+      "title": "getScenQrcode",
+      "source_type": "Web 直接 HTTP",
+      "yapi_status": "未命中"
+    },
+    {
+      "operation": "account.scan_login.check_qrcode",
+      "http_method": "POST",
+      "path": "/apis/account/user/scan-login/check/qrcode/{qrCodeId}",
+      "runtime_path": "/apis/account/user/scan-login/check/qrcode/{qrCodeId}",
+      "operation_title": "检查扫码登录二维码",
+      "title": "checkQRCodeStatus",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "未命中"
+    },
+    {
+      "operation": "account.scan_login.confirm",
+      "http_method": "POST",
+      "path": "/apis/account/user/scan-login/qrcode/confirm/{qrCodeId}",
+      "runtime_path": "/apis/account/user/scan-login/qrcode/confirm/{qrCodeId}",
+      "operation_title": "确认扫码登录",
+      "title": "scanLoginConfirm",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "未命中"
+    },
+    {
+      "operation": "account.scan_login.login",
+      "http_method": "POST",
+      "path": "/apis/account/user/scan-login/qrcode/login/{qrCodeId}",
+      "runtime_path": "/apis/account/user/scan-login/qrcode/login/{qrCodeId}",
+      "operation_title": "扫码登录",
+      "title": "scanLogin",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "未命中"
+    },
+    {
+      "operation": "account.scan_login.mark_scanned",
+      "http_method": "POST",
+      "path": "/apis/account/user/scan-login/qrcode/scanned/{qrCodeId}",
+      "runtime_path": "/apis/account/user/scan-login/qrcode/scanned/{qrCodeId}",
+      "operation_title": "上报二维码已扫描",
+      "title": "reportQRCodeStatus",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "未命中"
+    },
+    {
+      "operation": "account.third_party_auth.apple_login",
+      "http_method": "POST",
+      "path": "/apis/account/third-party/apple/login/verify",
+      "runtime_path": "/apis/account/third-party/apple/login/verify",
+      "operation_title": "Apple 登录校验",
+      "title": "loginWithApple",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "未命中"
+    },
+    {
+      "operation": "account.third_party_auth.bind",
+      "http_method": "GET",
+      "path": "/apis/account/third-party-auth/bind",
+      "runtime_path": "/apis/account/third-party-auth/bind",
+      "operation_title": "三方账号绑定",
+      "title": "getThirdLoginBindStatus",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "未命中"
+    },
+    {
+      "operation": "account.third_party_auth.facebook_login",
+      "http_method": "POST",
+      "path": "/apis/account/third-party/facebook/login",
+      "runtime_path": "/apis/account/third-party/facebook/login",
+      "operation_title": "Facebook 登录",
+      "title": "loginWithFacebook",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "未命中"
+    },
+    {
+      "operation": "account.third_party_auth.generate_state",
+      "http_method": "GET",
+      "path": "/apis/account/third-party-auth/generateState/{source}",
+      "runtime_path": "/apis/account/third-party-auth/generateState/{source}",
+      "operation_title": "生成三方登录 state",
+      "title": "getThirdLoginState",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "未命中"
+    },
+    {
+      "operation": "account.third_party_auth.list_bindings",
+      "http_method": "GET",
+      "path": "/apis/account/user/socialUsers",
+      "runtime_path": "/apis/account/user/socialUsers",
+      "operation_title": "查询三方绑定列表",
+      "title": "getThirdLoginBindStatusList",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "未命中"
+    },
+    {
+      "operation": "account.third_party_auth.login",
+      "http_method": "GET",
+      "path": "/apis/account/third-party-auth/login",
+      "runtime_path": "/apis/account/third-party-auth/login",
+      "operation_title": "三方登录",
+      "title": "loginWithThird",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "未命中"
+    },
+    {
+      "operation": "account.third_party_auth.unbind",
+      "http_method": "DELETE",
+      "path": "/apis/account/user/unBindSocialUser/{source}",
+      "runtime_path": "/apis/account/user/unBindSocialUser/{source}",
+      "operation_title": "解绑三方账号",
+      "title": "deleteThirdLoginBindStatus",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "未命中"
+    },
+    {
+      "operation": "account.user.get_info",
+      "http_method": "GET",
+      "path": "/apis/account/user/info",
+      "runtime_path": "/apis/account/user/info",
+      "operation_title": "查询用户信息",
+      "title": "getThirdLoginUserInfo",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "未命中"
+    },
+    {
+      "operation": "account.user.update_info",
+      "http_method": "PUT",
+      "path": "/apis/account/public/user",
+      "runtime_path": "/apis/account/public/user",
+      "operation_title": "编辑用户信息",
+      "title": "editUserInfo",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "未命中"
+    },
+    {
+      "operation": "location.area.list_children",
+      "http_method": "GET",
+      "path": "/v1/area/r/{parentId}/children",
+      "runtime_path": "/apis/iot/v1/area/r/{parentId}/children",
+      "operation_title": "查询下级区域",
+      "title": "查询城市下级区域列表",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "location.area.search",
+      "http_method": "POST",
+      "path": "/v1/area/r/areas",
+      "runtime_path": "/apis/iot/v1/area/r/areas",
+      "operation_title": "模糊搜索区域",
+      "title": "根据名称查询国家城市",
+      "source_type": "APP 直接 HTTP",
+      "yapi_status": "精确命中"
+    }
+  ]
+}

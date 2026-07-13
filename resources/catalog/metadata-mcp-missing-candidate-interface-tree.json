@@ -1,0 +1,626 @@
+{
+  "schemaVersion": 1,
+  "interfaces": [
+    {
+      "operation": "house.core.create",
+      "http_method": "POST",
+      "path": "/v1/house/w/insert",
+      "runtime_path": "/apis/iot/v1/house/w/insert",
+      "title": "新建家庭",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "house.core.delete",
+      "http_method": "POST",
+      "path": "/v1/house/{id}/w/delete",
+      "runtime_path": "/apis/iot/v1/house/{id}/w/delete",
+      "title": "删除家庭",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "house.core.get_detail",
+      "http_method": "POST",
+      "path": "/v1/house/{id}/r/detail",
+      "runtime_path": "/apis/iot/v1/house/{id}/r/detail",
+      "title": "查询家庭详情",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "house.core.get_info",
+      "http_method": "GET",
+      "path": "/v1/house/{id}/r/info",
+      "runtime_path": "/apis/iot/v1/house/{id}/r/info",
+      "title": "查询家庭基础信息",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "house.core.list",
+      "http_method": "POST",
+      "path": "/v1/house/r/list",
+      "runtime_path": "/apis/iot/v1/house/r/list",
+      "title": "查询用户家庭列表",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "house.core.list_all",
+      "http_method": "POST",
+      "path": "/v1/house/r/all",
+      "runtime_path": "/apis/iot/v1/house/r/all",
+      "title": "查询用户家庭及统计聚合",
+      "source_type": "APP DataManager 聚合候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "house.core.update",
+      "http_method": "POST",
+      "path": "/v1/house/{id}/w/update",
+      "runtime_path": "/apis/iot/v1/house/{id}/w/update",
+      "title": "更新家庭",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "house.property.get",
+      "http_method": "GET",
+      "path": "/v2/house/r/{houseId}/properties",
+      "runtime_path": "/apis/iot/v2/house/r/{houseId}/properties",
+      "title": "查询家庭属性",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "room.area.update",
+      "http_method": "POST",
+      "path": "/v1/room/{id}/w/updategroups",
+      "runtime_path": "/apis/iot/v1/room/{id}/w/updategroups",
+      "title": "更新房间所属区域分组",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "room.core.batch_create",
+      "http_method": "POST",
+      "path": "/v1/room/w/batchinsert",
+      "runtime_path": "/apis/iot/v1/room/w/batchinsert",
+      "title": "批量新建房间",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "room.core.create",
+      "http_method": "POST",
+      "path": "/v1/room/w/insert",
+      "runtime_path": "/apis/iot/v1/room/w/insert",
+      "title": "新建房间",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "room.core.delete",
+      "http_method": "POST",
+      "path": "/v1/room/{id}/w/delete",
+      "runtime_path": "/apis/iot/v1/room/{id}/w/delete",
+      "title": "删除房间",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "room.core.get_detail",
+      "http_method": "POST",
+      "path": "/v1/room/{id}/r/detail",
+      "runtime_path": "/apis/iot/v1/room/{id}/r/detail",
+      "title": "查询房间详情",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "room.core.list",
+      "http_method": "POST",
+      "path": "/v1/room/r/list",
+      "runtime_path": "/apis/iot/v1/room/r/list",
+      "title": "查询房间列表",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "room.core.list_all",
+      "http_method": "POST",
+      "path": "/v1/room/r/all",
+      "runtime_path": "/apis/iot/v1/room/r/all",
+      "title": "查询家庭下所有房间",
+      "source_type": "APP DataManager 聚合候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "room.core.update",
+      "http_method": "POST",
+      "path": "/v1/room/{id}/w/update",
+      "runtime_path": "/apis/iot/v1/room/{id}/w/update",
+      "title": "更新房间详情",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "room.search.fuzzy",
+      "http_method": "POST",
+      "path": "/v1/room/{houseId}/r/fuzzy",
+      "runtime_path": "/apis/iot/v1/room/{houseId}/r/fuzzy",
+      "title": "房间模糊搜索",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "area.core.create",
+      "http_method": "PUT",
+      "path": "/v2/thing/manage/house/{houseId}/area/w/create",
+      "runtime_path": "/apis/iot/v2/thing/manage/house/{houseId}/area/w/create",
+      "title": "创建区域",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "路径形状命中"
+    },
+    {
+      "operation": "area.core.delete",
+      "http_method": "DELETE",
+      "path": "/v2/thing/manage/house/{houseId}/area/{id}/w/info",
+      "runtime_path": "/apis/iot/v2/thing/manage/house/{houseId}/area/{id}/w/info",
+      "title": "删除区域",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "路径形状命中"
+    },
+    {
+      "operation": "area.core.get_detail",
+      "http_method": "GET",
+      "path": "/v2/thing/manage/house/{houseId}/area/{id}/r/info",
+      "runtime_path": "/apis/iot/v2/thing/manage/house/{houseId}/area/{id}/r/info",
+      "title": "查询区域详情",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "路径形状命中"
+    },
+    {
+      "operation": "area.core.list",
+      "http_method": "GET",
+      "path": "/v2/thing/manage/house/{houseId}/area/r/info/{pageNo}/{pageSize}",
+      "runtime_path": "/apis/iot/v2/thing/manage/house/{houseId}/area/r/info/{pageNo}/{pageSize}",
+      "title": "查询区域列表",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "area.core.update",
+      "http_method": "POST",
+      "path": "/v2/thing/manage/house/{houseId}/area/{id}/w/modify",
+      "runtime_path": "/apis/iot/v2/thing/manage/house/{houseId}/area/{id}/w/modify",
+      "title": "更新区域",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "路径形状命中"
+    },
+    {
+      "operation": "area_group.legacy_group.create",
+      "http_method": "POST",
+      "path": "/v1/group/w/insert",
+      "runtime_path": "/apis/iot/v1/group/w/insert",
+      "title": "新增区域分组",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "area_group.legacy_group.delete",
+      "http_method": "POST",
+      "path": "/v1/group/{id}/w/delete",
+      "runtime_path": "/apis/iot/v1/group/{id}/w/delete",
+      "title": "删除区域分组",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "area_group.legacy_group.fuzzy_search",
+      "http_method": "POST",
+      "path": "/v1/group/r/{houseId}/fuzzy",
+      "runtime_path": "/apis/iot/v1/group/r/{houseId}/fuzzy",
+      "title": "区域分组模糊查询",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "area_group.legacy_group.get_detail",
+      "http_method": "POST",
+      "path": "/v1/group/{id}/r/detail",
+      "runtime_path": "/apis/iot/v1/group/{id}/r/detail",
+      "title": "查询区域分组详情",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "area_group.legacy_group.list",
+      "http_method": "POST",
+      "path": "/v1/group/r/list",
+      "runtime_path": "/apis/iot/v1/group/r/list",
+      "title": "查询区域分组列表",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "area_group.legacy_group.list_all",
+      "http_method": "POST",
+      "path": "/v1/group/r/all",
+      "runtime_path": "/apis/iot/v1/group/r/all",
+      "title": "查询区域分组及房间关系",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "area_group.legacy_group.update",
+      "http_method": "POST",
+      "path": "/v1/group/{id}/w/update",
+      "runtime_path": "/apis/iot/v1/group/{id}/w/update",
+      "title": "更新区域分组",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "device.slot.batch_create",
+      "http_method": "POST",
+      "path": "/v1/device/w/batchinsert",
+      "runtime_path": "/apis/iot/v1/device/w/batchinsert",
+      "title": "批量新增设备槽位",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "device.slot.create",
+      "http_method": "POST",
+      "path": "/v1/device/w/insert",
+      "runtime_path": "/apis/iot/v1/device/w/insert",
+      "title": "新增设备槽位",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "device.slot.delete",
+      "http_method": "POST",
+      "path": "/v1/device/{id}/w/delete",
+      "runtime_path": "/apis/iot/v1/device/{id}/w/delete",
+      "title": "删除设备槽位",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "device.slot.get_detail",
+      "http_method": "POST",
+      "path": "/v1/device/{id}/r/detail",
+      "runtime_path": "/apis/iot/v1/device/{id}/r/detail",
+      "title": "查询设备详情",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "device.slot.list_all",
+      "http_method": "POST",
+      "path": "/v1/device/r/all",
+      "runtime_path": "/apis/iot/v1/device/r/all",
+      "title": "查询家庭下所有设备",
+      "source_type": "APP DataManager 聚合候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "device.slot.unbind",
+      "http_method": "POST",
+      "path": "/v1/device/{id}/w/unbind",
+      "runtime_path": "/apis/iot/v1/device/{id}/w/unbind",
+      "title": "设备解绑",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "device.slot.unbind_and_clear_mac",
+      "http_method": "POST",
+      "path": "/v1/device/{id}/w/unbindandclearmac",
+      "runtime_path": "/apis/iot/v1/device/{id}/w/unbindandclearmac",
+      "title": "设备解绑并清除 MAC",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "device.slot.update",
+      "http_method": "POST",
+      "path": "/v1/device/{id}/w/update",
+      "runtime_path": "/apis/iot/v1/device/{id}/w/update",
+      "title": "更新设备详情",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "gateway.core.create",
+      "http_method": "PUT",
+      "path": "/v2/thing/manage/house/{houseId}/gateway/w/create",
+      "runtime_path": "/apis/iot/v2/thing/manage/house/{houseId}/gateway/w/create",
+      "title": "新增网关维护信息",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "路径形状命中"
+    },
+    {
+      "operation": "gateway.core.delete",
+      "http_method": "DELETE",
+      "path": "/v2/thing/manage/house/{houseId}/gateway/{id}/w/info",
+      "runtime_path": "/apis/iot/v2/thing/manage/house/{houseId}/gateway/{id}/w/info",
+      "title": "删除网关维护信息",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "未命中"
+    },
+    {
+      "operation": "gateway.core.get_detail",
+      "http_method": "GET",
+      "path": "/v2/thing/manage/house/{houseId}/gateway/{id}/r/info",
+      "runtime_path": "/apis/iot/v2/thing/manage/house/{houseId}/gateway/{id}/r/info",
+      "title": "查询网关详情",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "路径形状命中"
+    },
+    {
+      "operation": "gateway.core.list",
+      "http_method": "POST",
+      "path": "/v1/device/r/gateways",
+      "runtime_path": "/apis/iot/v1/device/r/gateways",
+      "title": "查询家庭下所有网关",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "gateway.core.list_with_stats",
+      "http_method": "POST",
+      "path": "/v1/device/r/gatewayswithstats",
+      "runtime_path": "/apis/iot/v1/device/r/gatewayswithstats",
+      "title": "查询家庭下所有网关及统计",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "gateway.core.update",
+      "http_method": "POST",
+      "path": "/v2/thing/manage/house/{houseId}/gateway/{id}/w/modify",
+      "runtime_path": "/apis/iot/v2/thing/manage/house/{houseId}/gateway/{id}/w/modify",
+      "title": "更新网关详情",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "gateway.thread.get_info",
+      "http_method": "GET",
+      "path": "/v2/thing/manage/house/{houseId}/gateway/{id}/r/thread-info",
+      "runtime_path": "/apis/iot/v2/thing/manage/house/{houseId}/gateway/{id}/r/thread-info",
+      "title": "查询网关 Thread 信息",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "路径形状命中"
+    },
+    {
+      "operation": "device_group.member.update_devices",
+      "http_method": "POST",
+      "path": "/v2/thing/manage/house/{houseId}/group/{id}/w/devices",
+      "runtime_path": "/apis/iot/v2/thing/manage/house/{houseId}/group/{id}/w/devices",
+      "title": "设备组增删设备",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "device_group.mesh_group.create",
+      "http_method": "POST",
+      "path": "/v1/meshgroup/w/insert",
+      "runtime_path": "/apis/iot/v1/meshgroup/w/insert",
+      "title": "新建 Mesh 设备组",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "device_group.mesh_group.delete",
+      "http_method": "POST",
+      "path": "/v1/meshgroup/{id}/w/delete",
+      "runtime_path": "/apis/iot/v1/meshgroup/{id}/w/delete",
+      "title": "删除 Mesh 设备组",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "device_group.mesh_group.get_detail",
+      "http_method": "POST",
+      "path": "/v1/meshgroup/{id}/r/detail",
+      "runtime_path": "/apis/iot/v1/meshgroup/{id}/r/detail",
+      "title": "查询 Mesh 设备组详情",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "device_group.mesh_group.update",
+      "http_method": "POST",
+      "path": "/v1/meshgroup/{id}/w/update",
+      "runtime_path": "/apis/iot/v1/meshgroup/{id}/w/update",
+      "title": "更新 Mesh 设备组",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "scene.management.create",
+      "http_method": "POST",
+      "path": "/v1/scene/w/insert",
+      "runtime_path": "/apis/iot/v1/scene/w/insert",
+      "title": "新建情景",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "scene.management.delete",
+      "http_method": "POST",
+      "path": "/v1/scene/{id}/w/delete",
+      "runtime_path": "/apis/iot/v1/scene/{id}/w/delete",
+      "title": "删除情景",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "scene.management.get_detail",
+      "http_method": "POST",
+      "path": "/v1/scene/{id}/r/detail",
+      "runtime_path": "/apis/iot/v1/scene/{id}/r/detail",
+      "title": "查询情景详情",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "scene.management.list",
+      "http_method": "POST",
+      "path": "/v1/scene/r/list",
+      "runtime_path": "/apis/iot/v1/scene/r/list",
+      "title": "查询房间或家庭下情景",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "scene.management.list_all",
+      "http_method": "POST",
+      "path": "/v1/scene/r/all",
+      "runtime_path": "/apis/iot/v1/scene/r/all",
+      "title": "查询家庭下所有情景",
+      "source_type": "APP DataManager 聚合候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "scene.management.test",
+      "http_method": "POST",
+      "path": "/v1/scene/w/test",
+      "runtime_path": "/apis/iot/v1/scene/w/test",
+      "title": "测试情景",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "scene.management.update",
+      "http_method": "POST",
+      "path": "/v1/scene/{id}/w/update",
+      "runtime_path": "/apis/iot/v1/scene/{id}/w/update",
+      "title": "更新情景",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "scene.search.fuzzy",
+      "http_method": "POST",
+      "path": "/v1/scene/{houseId}/r/fuzzy",
+      "runtime_path": "/apis/iot/v1/scene/{houseId}/r/fuzzy",
+      "title": "家庭下情景搜索",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "favorite.core.batch_delete",
+      "http_method": "POST",
+      "path": "/v1/favourite/w/batchdelete",
+      "runtime_path": "/apis/iot/v1/favourite/w/batchdelete",
+      "title": "批量删除收藏",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "favorite.core.batch_insert",
+      "http_method": "POST",
+      "path": "/v1/favourite/w/batchinsert",
+      "runtime_path": "/apis/iot/v1/favourite/w/batchinsert",
+      "title": "批量新增收藏",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "favorite.core.batch_update",
+      "http_method": "POST",
+      "path": "/v1/favourite/w/batchupdate",
+      "runtime_path": "/apis/iot/v1/favourite/w/batchupdate",
+      "title": "批量更新收藏",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "favorite.core.list_all",
+      "http_method": "POST",
+      "path": "/v1/favourite/r/all",
+      "runtime_path": "/apis/iot/v1/favourite/r/all",
+      "title": "查询家庭下收藏",
+      "source_type": "APP DataManager 封装 + Controller/YApi 候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "thing_schema.house_snapshot.get_house",
+      "http_method": "GET",
+      "path": "/v2/thing/schema/house/{houseId}/r/info",
+      "runtime_path": "/apis/iot/v2/thing/schema/house/{houseId}/r/info",
+      "title": "获取家庭物模型概况",
+      "source_type": "APP DataManager 聚合候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "thing_schema.house_snapshot.list_area",
+      "http_method": "GET",
+      "path": "/v2/thing/schema/house/{houseId}/area/r/info/{pageNo}/{pageSize}",
+      "runtime_path": "/apis/iot/v2/thing/schema/house/{houseId}/area/r/info/{pageNo}/{pageSize}",
+      "title": "获取家庭区域物模型信息",
+      "source_type": "APP DataManager 聚合候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "thing_schema.house_snapshot.list_automation",
+      "http_method": "GET",
+      "path": "/v2/thing/schema/house/{houseId}/automation/r/info/{pageNo}/{pageSize}",
+      "runtime_path": "/apis/iot/v2/thing/schema/house/{houseId}/automation/r/info/{pageNo}/{pageSize}",
+      "title": "获取家庭自动化物模型信息",
+      "source_type": "APP DataManager 聚合候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "thing_schema.house_snapshot.list_device",
+      "http_method": "GET",
+      "path": "/v2/thing/schema/house/{houseId}/device/r/info/{pageNo}/{pageSize}",
+      "runtime_path": "/apis/iot/v2/thing/schema/house/{houseId}/device/r/info/{pageNo}/{pageSize}",
+      "title": "获取家庭设备物模型信息",
+      "source_type": "APP DataManager 聚合候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "thing_schema.house_snapshot.list_gateway",
+      "http_method": "GET",
+      "path": "/v2/thing/schema/house/{houseId}/gateway/r/info/{pageNo}/{pageSize}",
+      "runtime_path": "/apis/iot/v2/thing/schema/house/{houseId}/gateway/r/info/{pageNo}/{pageSize}",
+      "title": "获取家庭网关物模型信息",
+      "source_type": "APP DataManager 聚合候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "thing_schema.house_snapshot.list_group",
+      "http_method": "GET",
+      "path": "/v2/thing/schema/house/{houseId}/group/r/info/{pageNo}/{pageSize}",
+      "runtime_path": "/apis/iot/v2/thing/schema/house/{houseId}/group/r/info/{pageNo}/{pageSize}",
+      "title": "获取家庭设备组物模型信息",
+      "source_type": "APP DataManager 聚合候选",
+      "yapi_status": "路径命中但方法不一致"
+    },
+    {
+      "operation": "thing_schema.house_snapshot.list_room",
+      "http_method": "GET",
+      "path": "/v2/thing/schema/house/{houseId}/room/r/info/{pageNo}/{pageSize}",
+      "runtime_path": "/apis/iot/v2/thing/schema/house/{houseId}/room/r/info/{pageNo}/{pageSize}",
+      "title": "获取家庭房间物模型信息",
+      "source_type": "APP DataManager 聚合候选",
+      "yapi_status": "精确命中"
+    },
+    {
+      "operation": "thing_schema.house_snapshot.list_scene",
+      "http_method": "GET",
+      "path": "/v2/thing/schema/house/{houseId}/scene/r/info/{pageNo}/{pageSize}",
+      "runtime_path": "/apis/iot/v2/thing/schema/house/{houseId}/scene/r/info/{pageNo}/{pageSize}",
+      "title": "获取家庭情景物模型信息",
+      "source_type": "APP DataManager 聚合候选",
+      "yapi_status": "精确命中"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "name": "yeelight-metadata-mcp",
+  "displayName": "Yeelight Metadata MCP Server",
+  "description": "MCP server for Yeelight home metadata and management workflows.",
+  "version": "1.0.0",
+  "transport": {
+    "type": "streamable-http",
+    "path": "/mcp",
+    "localUrl": "http://127.0.0.1:9010/mcp",
+    "remoteUrl": "https://api.yeelight.com/apis/metadata_mcp_server/v1/mcp"
+  },
+  "auth": {
+    "type": "headers",
+    "required": ["Authorization"],
+    "optional": ["Client-Id", "House-Id"]
+  },
+  "capabilities": {
+    "tools": [
+      "yeelight_metadata.list_groups",
+      "yeelight_metadata.list_tasks",
+      "yeelight_metadata.list_actions",
+      "yeelight_metadata.get_action_schema",
+      "yeelight_metadata.execute_task"
+    ],
+    "resources": [
+      "yeelight-metadata://tasks",
+      "yeelight-metadata://actions",
+      "yeelight-metadata://schema/{task}/{action}"
+    ],
+    "prompts": [
+      "yeelight_metadata.inspect_home_metadata",
+      "yeelight_metadata.plan_metadata_change",
+      "yeelight_metadata.troubleshoot_automation_metadata"
+    ]
+  },
+  "safety": {
+    "defaultBindHost": "local/test:127.0.0.1;prod/dev:0.0.0.0",
+    "dryRunDefault": true,
+    "sideEffectConfirmation": "S2/S3 非 dryRun 执行必须传 options.confirmSideEffect=true",
+    "candidatePolicy": "candidate action 默认不可真实执行"
+  },
+  "tags": ["mcp", "yeelight", "metadata", "smart-home", "home-automation"],
+  "homepage": "https://github.com/Yeelight/yeelight-metadata-mcp",
+  "repository": "https://github.com/Yeelight/yeelight-metadata-mcp",
+  "license": "Apache-2.0"
+}

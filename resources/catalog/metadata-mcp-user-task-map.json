@@ -1,0 +1,833 @@
+{
+  "schemaVersion": 1,
+  "groups": [
+    {
+      "id": "family_space",
+      "title": "家庭与空间",
+      "summary": "管理家庭、房间、区域和家庭成员。"
+    },
+    {
+      "id": "device_onboarding",
+      "title": "设备接入与配网",
+      "summary": "完成设备槽位创建、配网、网关接入和 Matter 配对。"
+    },
+    {
+      "id": "device_management",
+      "title": "设备管理",
+      "summary": "查询、修改、移动、解绑和删除设备，以及维护设备组。"
+    },
+    {
+      "id": "configuration",
+      "title": "参数与面板配置",
+      "summary": "配置面板、旋钮、设备业务存储、图片资源和语音命名。"
+    },
+    {
+      "id": "scene_automation",
+      "title": "情景与自动化",
+      "summary": "维护情景、创建自动化和查询自动化能力。"
+    },
+    {
+      "id": "home_organization",
+      "title": "首页组织与收藏",
+      "summary": "维护收藏、排序和首页展示结构。"
+    },
+    {
+      "id": "maintenance_account",
+      "title": "维护、诊断与账号",
+      "summary": "处理升级、统计、诊断、账号和三方登录能力。"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "family_space.manage_house",
+      "group": "family_space",
+      "title": "管理家庭",
+      "summary": "查询、创建、编辑、删除家庭，并读取或写入家庭属性。",
+      "user_phrases": [
+        "查看我的家庭",
+        "新建一个家庭",
+        "把家庭名称改一下",
+        "读取家庭属性"
+      ],
+      "priority": "P0",
+      "side_effect": "S2",
+      "mcp_entry": "yeelight_metadata.execute_task",
+      "required_context": [
+        "userId 或登录态"
+      ],
+      "common_inputs": [
+        "houseId",
+        "name",
+        "description",
+        "properties"
+      ],
+      "interface_refs": [
+        "candidate:house.core.list",
+        "candidate:house.core.list_all",
+        "candidate:house.core.get_detail",
+        "candidate:house.core.create",
+        "candidate:house.core.update",
+        "candidate:house.core.delete",
+        "candidate:house.property.get",
+        "confirmed:house.property.update"
+      ]
+    },
+    {
+      "id": "family_space.manage_room",
+      "group": "family_space",
+      "title": "管理房间",
+      "summary": "查询、新建、批量新建、编辑、删除房间，并支持房间搜索。",
+      "user_phrases": [
+        "创建一个客厅",
+        "把灯移动到卧室",
+        "删除这个房间",
+        "搜索房间"
+      ],
+      "priority": "P0",
+      "side_effect": "S2",
+      "mcp_entry": "yeelight_metadata.execute_task",
+      "required_context": [
+        "houseId"
+      ],
+      "common_inputs": [
+        "roomId",
+        "name",
+        "areaIds",
+        "pageNo",
+        "pageSize",
+        "fuzzyName"
+      ],
+      "interface_refs": [
+        "candidate:room.core.list",
+        "candidate:room.core.list_all",
+        "candidate:room.core.get_detail",
+        "candidate:room.core.create",
+        "candidate:room.core.batch_create",
+        "candidate:room.core.update",
+        "candidate:room.core.delete",
+        "candidate:room.search.fuzzy",
+        "candidate:room.area.update"
+      ]
+    },
+    {
+      "id": "family_space.manage_area",
+      "group": "family_space",
+      "title": "管理区域",
+      "summary": "管理家庭内区域和旧版区域分组，支持区域创建、编辑、删除和模糊搜索。",
+      "user_phrases": [
+        "创建一个一楼区域",
+        "把房间加入区域",
+        "搜索区域",
+        "删除区域分组"
+      ],
+      "priority": "P1",
+      "side_effect": "S2",
+      "mcp_entry": "yeelight_metadata.execute_task",
+      "required_context": [
+        "houseId"
+      ],
+      "common_inputs": [
+        "areaId",
+        "groupId",
+        "name",
+        "roomIds",
+        "fuzzyName"
+      ],
+      "interface_refs": [
+        "candidate:area.core.list",
+        "candidate:area.core.get_detail",
+        "candidate:area.core.create",
+        "candidate:area.core.update",
+        "candidate:area.core.delete",
+        "candidate:area_group.legacy_group.list",
+        "candidate:area_group.legacy_group.list_all",
+        "candidate:area_group.legacy_group.fuzzy_search",
+        "candidate:area_group.legacy_group.create",
+        "candidate:area_group.legacy_group.update",
+        "candidate:area_group.legacy_group.delete"
+      ]
+    },
+    {
+      "id": "family_space.manage_member_share",
+      "group": "family_space",
+      "title": "管理家庭成员与分享",
+      "summary": "查询成员、邀请成员、接受分享、移除成员、转移管理员和退出家庭。",
+      "user_phrases": [
+        "邀请家人加入家庭",
+        "查看家庭成员",
+        "移除成员",
+        "转移家庭管理员"
+      ],
+      "priority": "P1",
+      "side_effect": "S2",
+      "mcp_entry": "yeelight_metadata.execute_task",
+      "required_context": [
+        "houseId"
+      ],
+      "common_inputs": [
+        "memberId",
+        "role",
+        "shareId",
+        "barcode",
+        "targetUser"
+      ],
+      "interface_refs": [
+        "confirmed:house.member.get_current",
+        "confirmed:house.member.list",
+        "confirmed:house.member.search",
+        "confirmed:house.member.remove",
+        "confirmed:house.member.update_role",
+        "confirmed:house.share.create_barcode",
+        "confirmed:house.share.list_history",
+        "confirmed:house.share.send_invite",
+        "confirmed:house.share.accept_invite",
+        "confirmed:house.share.accept_barcode",
+        "confirmed:house.membership.quit",
+        "confirmed:house.ownership.transfer"
+      ]
+    },
+    {
+      "id": "device_onboarding.create_device_slot",
+      "group": "device_onboarding",
+      "title": "创建设备槽位",
+      "summary": "为新设备创建云端槽位，是大多数配网流程的前置动作。",
+      "user_phrases": [
+        "添加一个新设备",
+        "添加设备",
+        "创建设备",
+        "新增设备",
+        "创建灯",
+        "添加灯",
+        "新增灯具",
+        "创建虚拟设备",
+        "create device",
+        "add device",
+        "给这个灯创建槽位",
+        "批量添加这些蓝牙 Mesh 设备"
+      ],
+      "priority": "P0",
+      "side_effect": "S2",
+      "mcp_entry": "yeelight_metadata.execute_task",
+      "required_context": [
+        "houseId",
+        "roomId"
+      ],
+      "common_inputs": [
+        "name",
+        "pid",
+        "gatewayDeviceId",
+        "mac",
+        "connectType",
+        "isVirtual",
+        "devices"
+      ],
+      "interface_refs": [
+        "candidate:device.slot.create",
+        "candidate:device.slot.batch_create",
+        "candidate:device.slot.list_all",
+        "candidate:thing_schema.house_snapshot.list_device"
+      ]
+    },
+    {
+      "id": "device_onboarding.pair_device",
+      "group": "device_onboarding",
+      "title": "设备配网",
+      "summary": "覆盖 Wi-Fi 屏预绑定、Matter 配对码申请、Matter 二次配对窗口和配网后刷新。",
+      "user_phrases": [
+        "帮我配网这个设备",
+        "申请 Matter 配对码",
+        "打开 Matter 二次配对窗口",
+        "预绑定 Wi-Fi 屏"
+      ],
+      "priority": "P0",
+      "side_effect": "S2",
+      "mcp_entry": "yeelight_metadata.execute_task",
+      "required_context": [
+        "houseId",
+        "roomId 或 nodeId"
+      ],
+      "common_inputs": [
+        "nodeId",
+        "deviceId",
+        "manualCode",
+        "qrCode",
+        "source",
+        "timeout"
+      ],
+      "interface_refs": [
+        "confirmed:device.screen.pre_bind",
+        "confirmed:matter.pairing_code.apply",
+        "confirmed:matter.secondary_pairing.apply",
+        "confirmed:matter.secondary_pairing.get_progress",
+        "confirmed:matter.secondary_pairing.cancel",
+        "candidate:device.slot.update",
+        "candidate:device.slot.list_all"
+      ]
+    },
+    {
+      "id": "device_onboarding.manage_gateway_onboarding",
+      "group": "device_onboarding",
+      "title": "网关接入",
+      "summary": "创建和维护网关，并在接入后刷新家庭网关与设备视图。",
+      "user_phrases": [
+        "添加一个网关",
+        "创建网关",
+        "查看网关列表",
+        "获取网关 Thread 信息"
+      ],
+      "priority": "P0",
+      "side_effect": "S2",
+      "mcp_entry": "yeelight_metadata.execute_task",
+      "required_context": [
+        "houseId"
+      ],
+      "common_inputs": [
+        "gatewayId",
+        "name",
+        "pcId",
+        "pageNo",
+        "pageSize"
+      ],
+      "interface_refs": [
+        "candidate:gateway.core.create",
+        "candidate:gateway.core.list",
+        "candidate:gateway.core.list_with_stats",
+        "candidate:gateway.core.get_detail",
+        "candidate:gateway.core.update",
+        "candidate:gateway.core.delete",
+        "candidate:gateway.thread.get_info",
+        "candidate:thing_schema.house_snapshot.list_gateway"
+      ]
+    },
+    {
+      "id": "device_management.query_device",
+      "group": "device_management",
+      "title": "查询设备",
+      "summary": "按家庭、房间、资源或 PID 查询设备、设备详情和物模型定义。",
+      "user_phrases": [
+        "列出客厅的设备",
+        "查看设备详情",
+        "按 PID 查询物模型",
+        "查看全屋设备"
+      ],
+      "priority": "P0",
+      "side_effect": "S0",
+      "mcp_entry": "yeelight_metadata.execute_task",
+      "required_context": [
+        "houseId"
+      ],
+      "common_inputs": [
+        "deviceId",
+        "roomId",
+        "resType",
+        "resId",
+        "pid",
+        "pageNo",
+        "pageSize"
+      ],
+      "interface_refs": [
+        "candidate:device.slot.list_all",
+        "candidate:device.slot.get_detail",
+        "confirmed:device.relation.list_devices",
+        "confirmed:device.schema.get_by_pid",
+        "candidate:thing_schema.house_snapshot.get_house",
+        "candidate:thing_schema.house_snapshot.list_device",
+        "candidate:thing_schema.house_snapshot.list_room"
+      ]
+    },
+    {
+      "id": "device_management.update_device",
+      "group": "device_management",
+      "title": "修改设备信息",
+      "summary": "修改设备名称、房间、图标、描述和拓扑属性。",
+      "user_phrases": [
+        "把这个灯改名",
+        "移动设备到卧室",
+        "修改设备图标",
+        "更新设备拓扑属性"
+      ],
+      "priority": "P0",
+      "side_effect": "S2",
+      "mcp_entry": "yeelight_metadata.execute_task",
+      "required_context": [
+        "deviceId"
+      ],
+      "common_inputs": [
+        "name",
+        "roomId",
+        "icon",
+        "description",
+        "attributes"
+      ],
+      "interface_refs": [
+        "candidate:device.slot.update",
+        "confirmed:device.attribute.update",
+        "confirmed:ai.name.batch_update",
+        "candidate:room.area.update",
+        "candidate:thing_schema.house_snapshot.list_device"
+      ]
+    },
+    {
+      "id": "device_management.remove_device",
+      "group": "device_management",
+      "title": "解绑或删除设备",
+      "summary": "解绑设备、解绑并清除 MAC、删除设备槽位或删除网关维护信息。",
+      "user_phrases": [
+        "解绑这个设备",
+        "删除这个设备",
+        "清除设备 MAC",
+        "删除这个网关"
+      ],
+      "priority": "P2",
+      "side_effect": "S3",
+      "mcp_entry": "yeelight_metadata.execute_task",
+      "required_context": [
+        "deviceId"
+      ],
+      "common_inputs": [
+        "deviceId",
+        "gatewayId",
+        "clearMac"
+      ],
+      "interface_refs": [
+        "candidate:device.slot.unbind",
+        "candidate:device.slot.unbind_and_clear_mac",
+        "candidate:device.slot.delete",
+        "confirmed:device.slot.delete",
+        "candidate:gateway.core.delete"
+      ]
+    },
+    {
+      "id": "device_management.manage_device_group",
+      "group": "device_management",
+      "title": "设备打组",
+      "summary": "创建 Mesh 设备组、查询组详情、修改组信息、更新组内设备和删除组。",
+      "user_phrases": [
+        "把这些灯打成一组",
+        "编辑设备组成员",
+        "删除这个灯组",
+        "查看设备组详情"
+      ],
+      "priority": "P0",
+      "side_effect": "S2",
+      "mcp_entry": "yeelight_metadata.execute_task",
+      "required_context": [
+        "houseId",
+        "roomId"
+      ],
+      "common_inputs": [
+        "groupId",
+        "name",
+        "deviceIds",
+        "componentId"
+      ],
+      "interface_refs": [
+        "candidate:device_group.mesh_group.create",
+        "candidate:device_group.mesh_group.get_detail",
+        "candidate:device_group.mesh_group.update",
+        "candidate:device_group.mesh_group.delete",
+        "candidate:device_group.member.update_devices",
+        "candidate:thing_schema.house_snapshot.list_group"
+      ]
+    },
+    {
+      "id": "configuration.configure_panel",
+      "group": "configuration",
+      "title": "配置面板按键",
+      "summary": "查询面板、查询按键、更新按键布局、批量更新按键动作和重置动作。",
+      "user_phrases": [
+        "配置面板按键",
+        "重置这个按键动作",
+        "查询面板详情",
+        "批量更新面板事件"
+      ],
+      "priority": "P0",
+      "side_effect": "S2",
+      "mcp_entry": "yeelight_metadata.execute_task",
+      "required_context": [
+        "deviceId"
+      ],
+      "common_inputs": [
+        "buttonId",
+        "buttonEventId",
+        "events",
+        "layout"
+      ],
+      "interface_refs": [
+        "confirmed:panel.panel.get_detail",
+        "confirmed:panel.button.get_info",
+        "confirmed:panel.button.update_layout",
+        "confirmed:panel.button_event.update",
+        "confirmed:panel.button_event.batch_update",
+        "confirmed:panel.button_event.reset"
+      ]
+    },
+    {
+      "id": "configuration.configure_knob",
+      "group": "configuration",
+      "title": "配置旋钮",
+      "summary": "查询、更新和重置单键旋钮或多键旋钮配置。",
+      "user_phrases": [
+        "配置旋钮",
+        "查询多键旋钮详情",
+        "重置旋钮配置"
+      ],
+      "priority": "P0",
+      "side_effect": "S2",
+      "mcp_entry": "yeelight_metadata.execute_task",
+      "required_context": [
+        "deviceId"
+      ],
+      "common_inputs": [
+        "index",
+        "config",
+        "events"
+      ],
+      "interface_refs": [
+        "confirmed:knob.single.get_detail",
+        "confirmed:knob.single.update",
+        "confirmed:knob.single.reset",
+        "confirmed:knob.multi.get_detail",
+        "confirmed:knob.multi.update",
+        "confirmed:knob.multi.reset"
+      ]
+    },
+    {
+      "id": "configuration.configure_storage_asset",
+      "group": "configuration",
+      "title": "配置存储与资源",
+      "summary": "读写设备业务存储，上传或删除图片资源，并支持文字生成图片。",
+      "user_phrases": [
+        "保存设备配置",
+        "查询设备存储",
+        "上传屏保图片",
+        "文字生成图片"
+      ],
+      "priority": "P0",
+      "side_effect": "S2",
+      "mcp_entry": "yeelight_metadata.execute_task",
+      "required_context": [
+        "deviceId 或 pid"
+      ],
+      "common_inputs": [
+        "storageKey",
+        "storageValue",
+        "pid",
+        "imageBytes",
+        "imageUrls",
+        "prompt"
+      ],
+      "interface_refs": [
+        "confirmed:device.storage.get",
+        "confirmed:device.storage.set",
+        "confirmed:device.asset.upload_image",
+        "confirmed:device.asset.delete_images",
+        "confirmed:device.asset.text_to_image"
+      ]
+    },
+    {
+      "id": "configuration.configure_ai_voice",
+      "group": "configuration",
+      "title": "配置语音与 AI 名称",
+      "summary": "查询语音服务可控节点，更新可控节点，推荐设备/情景名称并批量改名。",
+      "user_phrases": [
+        "开启语音控制设备",
+        "推荐设备名称",
+        "批量优化设备名",
+        "获取 ASR 凭证"
+      ],
+      "priority": "P0",
+      "side_effect": "S2",
+      "mcp_entry": "yeelight_metadata.execute_task",
+      "required_context": [
+        "houseId"
+      ],
+      "common_inputs": [
+        "deviceIds",
+        "sceneIds",
+        "names",
+        "pid"
+      ],
+      "interface_refs": [
+        "confirmed:ai.voice_product.list",
+        "confirmed:ai.control_node.list",
+        "confirmed:ai.control_node.update",
+        "confirmed:ai.name.recommend_device",
+        "confirmed:ai.name.recommend_scene",
+        "confirmed:ai.name.batch_update",
+        "confirmed:ai.asr.get_temp_credential"
+      ]
+    },
+    {
+      "id": "scene_automation.manage_scene",
+      "group": "scene_automation",
+      "title": "管理情景",
+      "summary": "查询、创建、编辑、删除、测试和搜索情景。",
+      "user_phrases": [
+        "创建回家模式",
+        "编辑晚安情景",
+        "测试这个情景",
+        "删除情景"
+      ],
+      "priority": "P0",
+      "side_effect": "S2",
+      "mcp_entry": "yeelight_metadata.execute_task",
+      "required_context": [
+        "houseId"
+      ],
+      "common_inputs": [
+        "sceneId",
+        "roomId",
+        "name",
+        "actions",
+        "fuzzyName"
+      ],
+      "interface_refs": [
+        "candidate:scene.management.list",
+        "candidate:scene.management.list_all",
+        "candidate:scene.management.get_detail",
+        "candidate:scene.management.create",
+        "candidate:scene.management.update",
+        "candidate:scene.management.delete",
+        "candidate:scene.management.test",
+        "candidate:scene.search.fuzzy",
+        "candidate:thing_schema.house_snapshot.list_scene"
+      ]
+    },
+    {
+      "id": "scene_automation.manage_automation",
+      "group": "scene_automation",
+      "title": "管理自动化",
+      "summary": "查询、新建、编辑、删除、测试、启用和禁用自动化。",
+      "user_phrases": [
+        "创建一个自动化",
+        "晚上自动开灯",
+        "禁用这个自动化",
+        "测试自动化"
+      ],
+      "priority": "P0",
+      "side_effect": "S2",
+      "mcp_entry": "yeelight_metadata.execute_task",
+      "required_context": [
+        "houseId"
+      ],
+      "common_inputs": [
+        "automationId",
+        "name",
+        "startTime",
+        "endTime",
+        "repeatType",
+        "repeatValue",
+        "params",
+        "actions",
+        "status",
+        "version",
+        "pageNo",
+        "pageSize"
+      ],
+      "interface_refs": [
+        "confirmed:automation.rule.list",
+        "confirmed:automation.rule.page",
+        "confirmed:automation.rule.create",
+        "confirmed:automation.rule.update",
+        "confirmed:automation.rule.delete",
+        "confirmed:automation.rule.test",
+        "confirmed:automation.rule.enable",
+        "confirmed:automation.rule.disable",
+        "confirmed:automation.legacy_rule.list",
+        "confirmed:automation.legacy_rule.create",
+        "confirmed:automation.legacy_rule.update",
+        "confirmed:automation.legacy_rule.delete",
+        "candidate:thing_schema.house_snapshot.list_automation"
+      ]
+    },
+    {
+      "id": "scene_automation.query_automation_capability",
+      "group": "scene_automation",
+      "title": "查询自动化能力",
+      "summary": "查询设备支持哪些自动化条件和动作，并结合物模型生成可选项。",
+      "user_phrases": [
+        "这个设备支持哪些自动化",
+        "能不能作为触发条件",
+        "查询设备动作能力"
+      ],
+      "priority": "P0",
+      "side_effect": "S0",
+      "mcp_entry": "yeelight_metadata.execute_task",
+      "required_context": [
+        "houseId 或 deviceId"
+      ],
+      "common_inputs": [
+        "deviceId",
+        "pid",
+        "nodeType",
+        "resId"
+      ],
+      "interface_refs": [
+        "confirmed:automation.capability.list",
+        "confirmed:automation.capability.list_v2",
+        "confirmed:device.schema.get_by_pid",
+        "candidate:thing_schema.house_snapshot.list_device"
+      ]
+    },
+    {
+      "id": "home_organization.manage_favorite",
+      "group": "home_organization",
+      "title": "管理收藏",
+      "summary": "查询家庭收藏，批量新增、更新或删除收藏设备和情景。",
+      "user_phrases": [
+        "收藏这个设备",
+        "从首页移除这个情景",
+        "更新我的收藏列表"
+      ],
+      "priority": "P0",
+      "side_effect": "S2",
+      "mcp_entry": "yeelight_metadata.execute_task",
+      "required_context": [
+        "houseId"
+      ],
+      "common_inputs": [
+        "items",
+        "resId",
+        "resType",
+        "rank"
+      ],
+      "interface_refs": [
+        "candidate:favorite.core.list_all",
+        "candidate:favorite.core.batch_insert",
+        "candidate:favorite.core.batch_update",
+        "candidate:favorite.core.batch_delete"
+      ]
+    },
+    {
+      "id": "home_organization.manage_sort",
+      "group": "home_organization",
+      "title": "管理排序",
+      "summary": "维护首页、房间、设备和情景排序。",
+      "user_phrases": [
+        "调整首页设备顺序",
+        "把这个设备排到前面",
+        "查询房间情景排序"
+      ],
+      "priority": "P1",
+      "side_effect": "S2",
+      "mcp_entry": "yeelight_metadata.execute_task",
+      "required_context": [
+        "houseId"
+      ],
+      "common_inputs": [
+        "target",
+        "type",
+        "resType",
+        "resId",
+        "rank"
+      ],
+      "interface_refs": [
+        "confirmed:scene.sort.add",
+        "confirmed:scene.sort.list_room_scene",
+        "confirmed:device.relation.list_devices",
+        "candidate:favorite.core.list_all"
+      ]
+    },
+    {
+      "id": "maintenance_account.upgrade_and_stats",
+      "group": "maintenance_account",
+      "title": "升级与统计",
+      "summary": "查询 APP 最新版本、设备用电统计、D 寸屏支持设备和 OTA 更新。",
+      "user_phrases": [
+        "检查 APP 更新",
+        "查询用电统计",
+        "检查 D 寸屏 OTA",
+        "查询支持设备"
+      ],
+      "priority": "P1",
+      "side_effect": "S0",
+      "mcp_entry": "yeelight_metadata.execute_task",
+      "required_context": [
+        "houseId 或 deviceId"
+      ],
+      "common_inputs": [
+        "deviceIds",
+        "startTime",
+        "endTime",
+        "pid"
+      ],
+      "interface_refs": [
+        "confirmed:upgrade.app.get_latest",
+        "confirmed:upgrade.device_stat.get_electricity",
+        "confirmed:upgrade.ptx.list_devices",
+        "confirmed:upgrade.ptx.list_ota_updates"
+      ]
+    },
+    {
+      "id": "maintenance_account.manage_account",
+      "group": "maintenance_account",
+      "title": "账号与登录",
+      "summary": "查询用户信息、编辑用户信息、扫码登录和三方账号绑定/解绑。",
+      "user_phrases": [
+        "查看账号信息",
+        "绑定第三方账号",
+        "扫码登录",
+        "解绑 Facebook"
+      ],
+      "priority": "P2",
+      "side_effect": "S3",
+      "mcp_entry": "yeelight_metadata.execute_task",
+      "required_context": [
+        "登录态"
+      ],
+      "common_inputs": [
+        "device",
+        "qrCodeId",
+        "source",
+        "profile",
+        "thirdPartyToken"
+      ],
+      "interface_refs": [
+        "confirmed:account.user.get_info",
+        "confirmed:account.user.update_info",
+        "confirmed:account.account.exists",
+        "confirmed:account.scan_login.query_qrcode",
+        "confirmed:account.scan_login.check_qrcode",
+        "confirmed:account.scan_login.mark_scanned",
+        "confirmed:account.scan_login.confirm",
+        "confirmed:account.scan_login.login",
+        "confirmed:account.third_party_auth.generate_state",
+        "confirmed:account.third_party_auth.login",
+        "confirmed:account.third_party_auth.bind",
+        "confirmed:account.third_party_auth.list_bindings",
+        "confirmed:account.third_party_auth.unbind"
+      ]
+    },
+    {
+      "id": "maintenance_account.diagnostics",
+      "group": "maintenance_account",
+      "title": "诊断与外部能力",
+      "summary": "网络连通性诊断、动态固件下载和 Sonos/LAN 类非云端能力的边界说明。",
+      "user_phrases": [
+        "检查网络",
+        "下载 OTA 文件",
+        "发现 Sonos 分组",
+        "读取网关本地节点"
+      ],
+      "priority": "P2",
+      "side_effect": "S1",
+      "mcp_entry": "yeelight_metadata.execute_task",
+      "required_context": [
+        "运行环境"
+      ],
+      "common_inputs": [
+        "url",
+        "gatewayId",
+        "diagnosisType"
+      ],
+      "interface_refs": [
+        "external:https://yeelight.com",
+        "external:ptx_ota_dynamic_file_url",
+        "non_rest:realtime.lan_gateway.sync_nodes_groups",
+        "non_rest:sonos.group.discover_and_listen",
+        "candidate:gateway.thread.get_info"
+      ]
+    }
+  ]
+}
