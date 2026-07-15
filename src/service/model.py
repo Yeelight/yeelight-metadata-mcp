@@ -34,7 +34,6 @@ class TaskContext(BaseModel):
     deviceId: Optional[str] = Field(None, description="设备 ID")
     nodeId: Optional[str] = Field(None, description="节点 ID")
     userId: Optional[str] = Field(None, description="用户 ID")
-    clientId: Optional[str] = Field(None, description="客户端 ID")
     runtimeEnv: Optional[str] = Field(None, description="调用方运行环境，例如 local/test/prod")
 
     model_config = ConfigDict(extra="allow")

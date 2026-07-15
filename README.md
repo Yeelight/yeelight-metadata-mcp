@@ -29,7 +29,7 @@ Typical paths: smart-home agents and generated apps -> Skills -> Yeelight Home; 
 
 ## Highlights
 
-- Five namespaced tools instead of a large set of low-level HTTP operations.
+- Six namespaced tools instead of a large set of low-level HTTP operations.
 - 7 task groups, 23 tasks, and a runtime action catalog.
 - Safe-by-default execution: `dryRun` defaults to `true`.
 - Explicit confirmation for S2/S3 side effects.
@@ -51,17 +51,20 @@ Required request header:
 
 Recommended optional headers:
 
-- `Client-Id`
+- `Yeelight-Region`: `cn`, `sg`, `us`, or `eu`; defaults to the deployment Region (`cn` by default)
 - `House-Id`
 
-`House-Id` is used as the default global home context. An explicit
-`context.houseId` in a tool request takes precedence.
+`Authorization` is the only required user credential. Yeelight services derive
+the client identity from its verified authorization context. For actions that
+need a home, precedence is `context.houseId` -> `House-Id` -> first Pro home in
+the same Region. The fallback is request-scoped, not a global current-home state.
 
 ## MCP Capabilities
 
 Tools:
 
 - `yeelight_metadata.list_groups`
+- `yeelight_metadata.list_houses`
 - `yeelight_metadata.list_tasks`
 - `yeelight_metadata.list_actions`
 - `yeelight_metadata.get_action_schema`
@@ -83,6 +86,19 @@ Treat the live MCP `tools/list` response as the source of truth for tool schemas
 
 ## Quick Start
 
+### Recommended: authorize with Yeelight AI CLI
+
+```bash
+npm install --global yeelight-ai
+yeelight-ai login --method qr --region cn
+yeelight-ai client configure cursor --write --yes
+```
+
+In Yeelight Pro APP, tap the `+` button in the top-right corner of Home, choose
+**MCP Authorization**, and scan the terminal QR code. The CLI saves the Region,
+Authorization, and selected home, then generates client configuration. The MCP
+server remains independently usable without the CLI.
+
 ### Connect to the hosted server
 
 ```json
@@ -92,13 +108,18 @@ Treat the live MCP `tools/list` response as the source of truth for tool schemas
       "url": "https://api.yeelight.com/apis/metadata_mcp_server/v1/mcp",
       "headers": {
         "Authorization": "<YOUR_AUTHORIZATION>",
-        "Client-Id": "<YOUR_CLIENT_ID>",
+        "Yeelight-Region": "cn",
         "House-Id": "<YOUR_HOUSE_ID>"
       }
     }
   }
 }
 ```
+
+Both optional headers may be omitted. Match the endpoint host to the Region
+(`api.yeelight.com`, `api-sg.yeelight.com`, `api-us.yeelight.com`, or
+`api-de.yeelight.com`). To switch homes, call `yeelight_metadata.list_houses`,
+then pass the chosen ID as `request.context.houseId` on subsequent calls.
 
 See the [integration guide](guides/integration.md) for Cursor, Claude Desktop,
 local source, and combined IoT/Metadata configurations.
@@ -145,10 +166,12 @@ schema.
 
 ```json
 {
-  "task": "family_space.manage_room",
-  "action": "create",
-  "payload": {"name": "Sample Room"},
-  "options": {"dryRun": true}
+  "request": {
+    "task": "family_space.manage_room",
+    "action": "create",
+    "payload": {"name": "Sample Room"},
+    "options": {"dryRun": true}
+  }
 }
 ```
 
@@ -165,6 +188,7 @@ data.
 | `METADATA_MCP_BIND_HOST` | local/test: `127.0.0.1`; prod/dev: `0.0.0.0` | Listen address |
 | `METADATA_MCP_PORT` | `9010` | Listen port |
 | `METADATA_MCP_PATH` | `/mcp` | MCP route |
+| `METADATA_MCP_DEFAULT_REGION` | `cn` | Default Region when `Yeelight-Region` is absent |
 | `METADATA_MCP_HOST_PREFIX` | `https://api.yeelight.com` | Yeelight API host |
 | `METADATA_MCP_API_BASE_URL` | host prefix | Explicit API base URL |
 | `METADATA_MCP_HTTP_TIMEOUT` | `15` | Upstream timeout in seconds |
@@ -174,6 +198,9 @@ data.
 | `METADATA_MCP_ALLOW_CANDIDATE_EXECUTION` | `false` | Candidate execution gate |
 
 Legacy `APP_MCP_*` names remain supported for deployment compatibility.
+Standard Yeelight cloud origins support per-request Region routing. A custom
+API base is fixed to `METADATA_MCP_DEFAULT_REGION`; requests naming another
+Region are rejected instead of being silently misrouted.
 
 ## Documentation
 

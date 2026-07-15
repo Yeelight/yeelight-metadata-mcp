@@ -10,7 +10,7 @@ if str(PROJECT_DIR) not in sys.path:
 from scripts.mcp_acceptance_cli import auth_headers, build_execute_request, print_execution_summary
 from config.config import normalize_api_base_url, resolve_resource_dir
 from service.executor import TaskExecutor
-from service.mcp_service import describe_registry_task, enrich_request_context, get_registry_action_schema, get_registry_context_hints, get_request_headers, list_registry_actions, list_registry_groups, list_registry_tasks, search_task_registry
+from service.mcp_service import describe_registry_task, get_registry_action_schema, get_registry_context_hints, list_registry_actions, list_registry_groups, list_registry_tasks, search_task_registry
 from service.model import InterfaceStatus, TaskContext, TaskExecutionRequest, ValidationRequest
 from service.registry import MetadataTaskRegistry
 
@@ -27,12 +27,6 @@ class DummyHttpClient:
 class ErrorHttpClient:
     def request(self, method, url, headers=None, params=None, json=None):
         return {"code": "500", "msg": "业务失败", "data": None}
-
-
-class DummyContext:
-    def __init__(self, headers):
-        request = type("Request", (), {"headers": headers})()
-        self.request_context = type("RequestContext", (), {"request": request})()
 
 
 def test_api_base_url_accepts_iot_host_prefix():
@@ -240,49 +234,32 @@ def test_candidate_execute_with_allow_candidate_returns_explicit_allow_guidance(
     assert any("本次已由 options.allowCandidate=true 显式放行" in item for item in result.plan.guidance)
 
 
-def test_house_id_header_enriches_validation_context():
-    request = ValidationRequest(
-        task="family_space.manage_room",
-        action="list_all_room",
-        context=TaskContext(runtimeEnv="test"),
-        options={"allowCandidate": True},
-    )
+def test_context_hints_do_not_expose_client_id():
+    result = get_registry_context_hints("family_space.manage_room", "list_all_room")
 
-    enrich_request_context(request, {"houseId": "house-from-header", "clientId": "dev"})
-
-    assert request.context.houseId == "house-from-header"
-    assert request.context.clientId == "dev"
+    assert "Client-Id" not in str(result)
+    assert "clientId" not in str(result)
 
 
-def test_explicit_context_house_id_overrides_header():
-    request = TaskExecutionRequest(
-        task="family_space.manage_house",
-        action="get_house_detail",
-        context=TaskContext(houseId="house-from-context", runtimeEnv="test"),
-        options={"dryRun": False, "allowCandidate": True},
-    )
-
-    enrich_request_context(request, {"houseId": "house-from-header"})
-
-    assert request.context.houseId == "house-from-context"
-
-
-def test_execute_can_use_house_id_from_header_context_enrichment():
+def test_executor_uses_request_level_api_base_url():
     registry = MetadataTaskRegistry()
     http_client = DummyHttpClient()
-    executor = TaskExecutor(registry, http_client)
+    task_executor = TaskExecutor(registry, http_client)
     request = TaskExecutionRequest(
         task="family_space.manage_house",
         action="get_house_detail",
-        context=TaskContext(runtimeEnv="test"),
-        options={"dryRun": False, "allowCandidate": True},
+        context=TaskContext(houseId="house-eu"),
+        options={"dryRun": False},
     )
 
-    enrich_request_context(request, {"houseId": "house-from-header"})
-    result = executor.execute(request, headers={})
+    result = task_executor.execute(
+        request,
+        headers={"authorization": "Bearer token"},
+        api_base_url="https://api-de.yeelight.com",
+    )
 
     assert result.ok
-    assert http_client.calls[0]["url"].endswith("/apis/iot/v1/house/house-from-header/r/detail")
+    assert http_client.calls[0]["url"].startswith("https://api-de.yeelight.com/")
 
 
 def test_cli_execute_does_not_allow_candidate_by_default():
@@ -347,23 +324,11 @@ def test_cli_execution_summary_prints_normalized_data(capsys):
 
 
 def test_cli_auth_headers_include_global_house_id():
-    headers = auth_headers("token", "house-1")
+    headers = auth_headers("token", "house-1", "eu")
 
     assert headers["Authorization"] == "Bearer token"
     assert headers["House-Id"] == "house-1"
-
-
-def test_request_headers_normalize_bearer_token_once():
-    headers = get_request_headers(DummyContext({"Authorization": "Bearer token", "House-Id": "house-1"}))
-
-    assert headers["authorization"] == "Bearer token"
-    assert headers["houseId"] == "house-1"
-
-
-def test_request_headers_add_bearer_to_raw_token():
-    headers = get_request_headers(DummyContext({"Authorization": "token"}))
-
-    assert headers["authorization"] == "Bearer token"
+    assert headers["Yeelight-Region"] == "eu"
 
 
 def test_search_task_registry_finds_room_actions():
@@ -475,7 +440,9 @@ def test_get_registry_action_schema_merges_schema_and_context_hints():
     assert result["localContextRequired"] == []
     assert result["payloadRequired"] == ["name"]
     assert "name" in result["payloadProperties"]
-    assert result["globalContext"]["headers"][1]["name"] == "House-Id"
+    assert result["globalContext"]["headers"][1]["name"] == "Yeelight-Region"
+    assert result["globalContext"]["headers"][2]["name"] == "House-Id"
+    assert result["globalContext"]["headers"][2]["required"] is False
     assert any("dryRun=true" in note for note in result["notes"])
 
 
@@ -962,7 +929,7 @@ def test_context_fields_are_sent_in_body_when_not_path_params():
     request = TaskExecutionRequest(
         task="family_space.manage_room",
         action="create",
-        context=TaskContext(houseId="house-1", runtimeEnv="local", clientId="dev"),
+        context=TaskContext(houseId="house-1", runtimeEnv="local"),
         payload={"name": "验收房间"},
         options={"dryRun": False, "confirmSideEffect": True, "allowCandidate": True},
     )

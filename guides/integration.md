@@ -18,19 +18,34 @@ headers but expose different capabilities.
 
 ## Credentials and Context
 
-The hosted service requires `Authorization`. `Client-Id` and `House-Id` are
-recommended. Keep all three values in the client's secret storage or local
-environment, never in a repository.
+The hosted service requires only `Authorization`. `Yeelight-Region` and
+`House-Id` are optional. Keep credentials in the client's secret storage or
+local environment, never in a repository.
 
 ```text
 Authorization: <YOUR_AUTHORIZATION>
-Client-Id: <YOUR_CLIENT_ID>
+Yeelight-Region: cn
 House-Id: <YOUR_HOUSE_ID>
 ```
 
 The server accepts a raw token or a `Bearer` token and normalizes it internally.
+Region defaults to the deployment default (`cn` unless configured otherwise).
+When a selected action needs a home and `House-Id` is absent, the server chooses
+the first Pro home in the same Region. An explicit `context.houseId` always wins.
 Local IDs such as `roomId`, `deviceId`, and `groupId` belong in the tool request
 `context`.
+
+## Recommended QR Authorization
+
+```bash
+npm install --global yeelight-ai
+yeelight-ai login --method qr --region cn
+yeelight-ai client configure cursor --write --yes
+```
+
+In Yeelight Pro APP, tap Home's top-right `+`, choose **MCP Authorization**, and
+scan the terminal QR code. This is the recommended way to obtain and configure
+Region, Authorization, and a home. The server does not depend on the CLI.
 
 ## Cursor and Streamable HTTP Clients
 
@@ -41,7 +56,7 @@ Local IDs such as `roomId`, `deviceId`, and `groupId` belong in the tool request
       "url": "https://api.yeelight.com/apis/mcp_server/v1/mcp",
       "headers": {
         "Authorization": "<YOUR_AUTHORIZATION>",
-        "Client-Id": "<YOUR_CLIENT_ID>",
+        "Yeelight-Region": "cn",
         "House-Id": "<YOUR_HOUSE_ID>"
       }
     },
@@ -49,7 +64,7 @@ Local IDs such as `roomId`, `deviceId`, and `groupId` belong in the tool request
       "url": "https://api.yeelight.com/apis/metadata_mcp_server/v1/mcp",
       "headers": {
         "Authorization": "<YOUR_AUTHORIZATION>",
-        "Client-Id": "<YOUR_CLIENT_ID>",
+        "Yeelight-Region": "cn",
         "House-Id": "<YOUR_HOUSE_ID>"
       }
     }
@@ -70,13 +85,13 @@ Keep only the servers needed by your workflow.
         "mcp-remote",
         "https://api.yeelight.com/apis/metadata_mcp_server/v1/mcp",
         "--header", "Authorization:${AUTHORIZATION}",
-        "--header", "Client-Id:${CLIENT_ID}",
+        "--header", "Yeelight-Region:${YEELIGHT_REGION}",
         "--header", "House-Id:${HOUSE_ID}",
         "--allow-http", "true"
       ],
       "env": {
         "AUTHORIZATION": "<YOUR_AUTHORIZATION>",
-        "CLIENT_ID": "<YOUR_CLIENT_ID>",
+        "YEELIGHT_REGION": "cn",
         "HOUSE_ID": "<YOUR_HOUSE_ID>"
       }
     }
@@ -106,15 +121,20 @@ still required locally. To use another catalog directory, set
 1. Connect and initialize the MCP session.
 2. Call `tools/list` and read the current schemas.
 3. Use `list_groups`, `list_tasks`, or `list_actions` to find a workflow.
-4. Call `get_action_schema` for exact context, payload, and option requirements.
-5. Call `execute_task` with `options.dryRun=true`.
-6. Review the HTTP plan and side-effect level.
-7. Confirm S2/S3 actions before live execution.
-8. Query the affected object after a write when verification is possible.
+4. Call `list_houses` when the user wants to inspect or switch homes, then put
+   the selected ID in later `request.context.houseId` values.
+5. Call `get_action_schema` for exact context, payload, and option requirements.
+6. Call `execute_task` with `options.dryRun=true`.
+7. Review the HTTP plan and side-effect level.
+8. Confirm S2/S3 actions before live execution and verify writes afterwards.
 
 ## Troubleshooting
 
 - `401`: add a valid `Authorization` header.
+- `400` with a Region error: use `cn`, `sg`, `us`, or `eu`, and ensure the
+  endpoint host belongs to the same Region.
+- No Pro home: configure `House-Id`, use `context.houseId`, or create/join a Pro
+  home in Yeelight Pro APP. The server does not fall back to SaaS projects.
 - Connection timeout: verify URL, proxy, bind address, and port.
 - `Invalid Host header`: check the host accepted by the MCP transport or use the
   correct gateway/container routing.

@@ -8,8 +8,10 @@ from mcp.server.fastmcp.server import Context
 from pydantic import Field
 
 from config.config import settings
+from config.region import api_base_for_region, resolve_region
 from service.executor import executor
-from service.model import TaskContext, TaskExecutionRequest, ValidationRequest
+from service.model import TaskExecutionRequest
+from service.request_context import CloudRequestContext, HouseContextError, HouseResolver
 from service.registry import registry
 from utils.auth import normalize_authorization_header
 
@@ -239,6 +241,7 @@ DEFAULT_ACTION_LIMIT = 200
 MAX_TASK_LIMIT = 100
 MAX_GROUP_LIMIT = 100
 MAX_ACTION_LIMIT = 500
+house_resolver = HouseResolver(executor.http_client)
 
 
 def _normalize_limit(value: Optional[int], default: int, maximum: int) -> int:
@@ -279,33 +282,38 @@ def _paginate(items: List[Dict[str, Any]], cursor: Optional[str], limit: int) ->
     }
 
 
-def get_request_headers(context: Optional[Context]) -> Dict[str, str]:
-    if context is None:
-        return {}
+def get_cloud_request_context(context: Context) -> CloudRequestContext:
     request_context = getattr(context, "request_context", None)
     request = getattr(request_context, "request", None)
-    if request is None or not hasattr(request, "headers"):
-        return {}
+    if request is None:
+        raise HouseContextError("当前 MCP 请求缺少 HTTP 上下文。")
 
-    authorization = request.headers.get(settings.AUTHORIZATION_HEADER_KEY)
-    client_id = request.headers.get(settings.CLIENT_ID_HEADER_KEY)
-    house_id = request.headers.get(settings.HOUSE_ID_HEADER_KEY)
-    headers: Dict[str, str] = {}
-    if authorization:
-        headers["authorization"] = normalize_authorization_header(authorization)
-    if client_id:
-        headers["clientId"] = client_id
-    if house_id:
-        headers["houseId"] = house_id
-    return headers
+    state = getattr(request, "state", None)
+    authorization = getattr(state, "authorization", None) if state is not None else None
+    authorization = authorization or request.headers.get(settings.AUTHORIZATION_HEADER_KEY)
+    if not authorization:
+        raise HouseContextError("当前 MCP 请求缺少 Authorization。")
+    authorization = normalize_authorization_header(authorization)
 
-
-def enrich_request_context(request: ValidationRequest | TaskExecutionRequest, headers: Dict[str, str]) -> None:
-    context_data = request.context.model_dump(exclude_none=True)
-    if not context_data.get("houseId") and headers.get("houseId"):
-        request.context = TaskContext(**{**context_data, "houseId": headers["houseId"]})
-    if not context_data.get("clientId") and headers.get("clientId"):
-        request.context = TaskContext(**{**request.context.model_dump(exclude_none=True), "clientId": headers["clientId"]})
+    region = getattr(state, "region", None) if state is not None else None
+    region = region or resolve_region(
+        request.headers.get(settings.REGION_HEADER_KEY),
+        settings.DEFAULT_REGION,
+    )
+    api_base_url = getattr(state, "api_base_url", None) if state is not None else None
+    api_base_url = api_base_url or api_base_for_region(
+        region,
+        settings.API_BASE_URL,
+        settings.DEFAULT_REGION,
+    )
+    house_id = getattr(state, "house_id", None) if state is not None else None
+    house_id = house_id or request.headers.get(settings.HOUSE_ID_HEADER_KEY)
+    return CloudRequestContext(
+        authorization=authorization,
+        region=region,
+        api_base_url=api_base_url,
+        house_id=house_id,
+    )
 
 
 def _normalize_search_text(value: Any) -> str:
@@ -584,8 +592,8 @@ def get_registry_context_hints(task: str, action: str) -> Dict[str, Any]:
         return {"isError": True, "errorMessage": f"未知 task/action: {task}/{action}"}
 
     schema = action_card.parameterSchema
-    global_context = [field for field in schema.contextRequired if field in {"houseId", "clientId"}]
-    local_context = [field for field in schema.contextRequired if field not in {"houseId", "clientId"}]
+    global_context = [field for field in schema.contextRequired if field == "houseId"]
+    local_context = [field for field in schema.contextRequired if field != "houseId"]
     return {
         "task": task_card.id,
         "action": action_card.id,
@@ -597,8 +605,8 @@ def get_registry_context_hints(task: str, action: str) -> Dict[str, Any]:
         "globalContext": {
             "headers": [
                 {"name": "Authorization", "required": True, "description": "访问令牌"},
-                {"name": "House-Id", "required": "houseId" in schema.contextRequired, "description": "全局家庭 ID，可补齐 context.houseId"},
-                {"name": "Client-Id", "required": False, "description": "客户端 ID，按需透传"},
+                {"name": "Yeelight-Region", "required": False, "description": "账号 Region；缺省使用服务部署默认值"},
+                {"name": "House-Id", "required": False, "description": "默认家庭 ID；缺省时按需自动选择首个 Pro 家庭"},
             ],
             "fields": global_context,
         },
@@ -608,6 +616,7 @@ def get_registry_context_hints(task: str, action: str) -> Dict[str, Any]:
         "optionHints": schema.optionHints,
         "notes": [
             "如果 Header House-Id 与 context.houseId 同时存在，以 context.houseId 为准。",
+            "需要家庭上下文且两者均缺失时，服务会选择当前 Region 的首个 Pro 家庭。",
             "roomId、deviceId、groupId 等局部业务 ID 应放在 context 中。",
         ],
     }
@@ -641,7 +650,7 @@ def get_registry_action_schema(task: str, action: str) -> Dict[str, Any]:
         "globalContext": hints.get("globalContext", {}),
         "localContextRequired": hints.get("localContextRequired", []),
         "notes": [
-            "Header 中的 House-Id 会自动补齐 context.houseId；显式传 context.houseId 时以显式值为准。",
+            "context.houseId 优先于 Header House-Id；两者缺失时按需自动选择首个 Pro 家庭。",
             "真实写入、删除、解绑、转移等操作应先调用 execute_task 且 options.dryRun=true 查看计划。",
             "确认真实执行时再设置 options.dryRun=false；S2/S3 操作还必须传 options.confirmSideEffect=true。",
         ],
@@ -741,6 +750,23 @@ def register_prompts(mcp: FastMCP) -> None:
 
 def register_task_tools(mcp: FastMCP):
     @mcp.tool(
+        name=f"{TOOL_NAMESPACE}.list_houses",
+        description="列出当前 Authorization 与 Region 可访问的 Pro 家庭。选择后在 execute_task 的 request.context.houseId 中显式传入家庭 ID，即可请求级切换家庭。",
+    )
+    def list_houses(context: Context) -> Dict[str, Any]:
+        try:
+            cloud = get_cloud_request_context(context)
+            houses = house_resolver.list_houses(cloud)
+            return {
+                "items": houses,
+                "count": len(houses),
+                "region": cloud.region,
+                "switchHint": "后续调用在 request.context.houseId 中传入目标 houseId；本服务不会保存全局当前家庭。",
+            }
+        except HouseContextError as error:
+            return {"isError": True, "errorMessage": str(error)}
+
+    @mcp.tool(
         name=f"{TOOL_NAMESPACE}.list_groups",
         description="分页返回 Metadata 任务分组摘要，帮助选择 list_tasks 的 group 参数。",
     )
@@ -796,9 +822,18 @@ def register_task_tools(mcp: FastMCP):
         context: Context,
         request: Annotated[TaskExecutionRequest, Field(description="任务执行请求，必须包含 task、action、context、payload 和 options")],
     ) -> Dict[str, Any]:
-        headers = get_request_headers(context)
-        enrich_request_context(request, headers)
-        return executor.execute(request, headers=headers).model_dump()
+        try:
+            cloud = get_cloud_request_context(context)
+            action = registry.get_action(request.task, request.action)
+            required_context = action.parameterSchema.contextRequired if action is not None else []
+            house_resolver.enrich(request, required_context, cloud)
+            return executor.execute(
+                request,
+                headers={"authorization": cloud.authorization},
+                api_base_url=cloud.api_base_url,
+            ).model_dump()
+        except HouseContextError as error:
+            return {"isError": True, "errorMessage": str(error), "code": "HOUSE_CONTEXT_ERROR"}
 
 
 def register_tools(mcp: FastMCP):

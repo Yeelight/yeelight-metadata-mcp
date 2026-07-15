@@ -1,5 +1,7 @@
 import os
 
+from config.region import DEFAULT_REGION, normalize_api_base_url, normalize_region
+
 
 _SERVICE_NAME = "yeelight-online-metadata-mcp-server"
 _DEFAULT_API_BASE_URL = "https://api.yeelight.com"
@@ -37,13 +39,6 @@ def resolve_resource_dir() -> str:
             return normalized
 
     return os.path.abspath(os.path.join(_PROJECT_DIR, "resources/catalog"))
-
-
-def normalize_api_base_url(raw_base_url: str) -> str:
-    value = (raw_base_url or _DEFAULT_API_BASE_URL).rstrip("/")
-    if value.endswith("/apis/iot"):
-        return value[: -len("/apis/iot")]
-    return value
 
 
 def default_bind_host() -> str:
@@ -91,6 +86,7 @@ class Config:
     MCP_SERVER_NAME = "Yeelight Metadata MCP Server"
     SERVICE_NAME = _SERVICE_NAME
     API_BASE_URL = normalize_api_base_url(_env("METADATA_MCP_API_BASE_URL", _env("METADATA_MCP_HOST_PREFIX", _env("APP_MCP_HOST_PREFIX", _DEFAULT_API_BASE_URL)), "APP_MCP_API_BASE_URL"))
+    DEFAULT_REGION = normalize_region(_env("METADATA_MCP_DEFAULT_REGION", DEFAULT_REGION))
     HTTP_TIMEOUT = int(_env("METADATA_MCP_HTTP_TIMEOUT", "15", "APP_MCP_HTTP_TIMEOUT"))
     BIND_HOST = _env("METADATA_MCP_BIND_HOST", default_bind_host(), "APP_MCP_BIND_HOST")
     MCP_PATH = _env("METADATA_MCP_PATH", "/mcp", "APP_MCP_PATH")
@@ -98,8 +94,8 @@ class Config:
     PORT = int(_env("METADATA_MCP_PORT", "9010", "APP_MCP_PORT"))
 
     AUTHORIZATION_HEADER_KEY = "Authorization"
+    REGION_HEADER_KEY = "Yeelight-Region"
     HOUSE_ID_HEADER_KEY = "House-Id"
-    CLIENT_ID_HEADER_KEY = "Client-Id"
 
     RUNTIME_ENV = _RUNTIME_ENV
     ALLOW_CANDIDATE_EXECUTION = _env("METADATA_MCP_ALLOW_CANDIDATE_EXECUTION", "false", "APP_MCP_ALLOW_CANDIDATE_EXECUTION").lower() == "true"

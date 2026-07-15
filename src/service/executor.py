@@ -119,7 +119,7 @@ class TaskExecutor:
         if "device.asset.text_to_image" in operations and not any(key in payload for key in ("texts", "prompt")):
             errors.append("device.asset.text_to_image 必须提供 texts 或 prompt 之一")
 
-    def build_plan(self, request: TaskExecutionRequest) -> ExecutionPlan:
+    def build_plan(self, request: TaskExecutionRequest, api_base_url: Optional[str] = None) -> ExecutionPlan:
         action = self.registry.get_action(request.task, request.action)
         if action is None:
             return ExecutionPlan(
@@ -151,7 +151,7 @@ class TaskExecutor:
         )
         interface = self._select_executable_interface(plan.interfaces)
         if interface is not None:
-            method, url, body, params = self._build_http_request(interface, request)
+            method, url, body, params = self._build_http_request(interface, request, api_base_url)
             plan.httpRequest = {
                 "method": method,
                 "url": url,
@@ -161,7 +161,12 @@ class TaskExecutor:
             }
         return plan
 
-    def execute(self, request: TaskExecutionRequest, headers: Dict[str, str]) -> ExecutionResult:
+    def execute(
+        self,
+        request: TaskExecutionRequest,
+        headers: Dict[str, str],
+        api_base_url: Optional[str] = None,
+    ) -> ExecutionResult:
         validation = self.validate(
             ValidationRequest(
                 task=request.task,
@@ -171,7 +176,7 @@ class TaskExecutor:
                 options=request.options,
             )
         )
-        plan = self.build_plan(request)
+        plan = self.build_plan(request, api_base_url)
         if not validation.valid:
             return ExecutionResult(ok=False, dryRun=request.options.dryRun, code=validation.code, plan=plan, validation=validation, message="任务校验失败")
 
@@ -189,7 +194,7 @@ class TaskExecutor:
                 message="未找到可直接执行的 HTTP 接口",
             )
 
-        method, url, body, params = self._build_http_request(interface, request)
+        method, url, body, params = self._build_http_request(interface, request, api_base_url)
         response = self.http_client.request(method, url, headers=headers, params=params, json=body)
         normalized = self._normalize_response(response)
         return ExecutionResult(
@@ -273,7 +278,12 @@ class TaskExecutor:
                 return interface
         return None
 
-    def _build_http_request(self, interface: InterfaceRef, request: TaskExecutionRequest) -> Tuple[str, str, Any, Dict[str, Any]]:
+    def _build_http_request(
+        self,
+        interface: InterfaceRef,
+        request: TaskExecutionRequest,
+        api_base_url: Optional[str] = None,
+    ) -> Tuple[str, str, Any, Dict[str, Any]]:
         method = (interface.method or "POST").upper()
         path = interface.runtimePath or interface.path or ""
         context_data = request.context.model_dump(exclude_none=True)
@@ -288,7 +298,7 @@ class TaskExecutor:
                 continue
             path = path.replace("{" + raw_key + "}", str(value))
 
-        url = f"{settings.API_BASE_URL}{path}"
+        url = f"{(api_base_url or settings.API_BASE_URL).rstrip('/')}{path}"
         context_body = {
             key: value
             for key, value in context_data.items()

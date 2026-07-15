@@ -1,4 +1,5 @@
 import importlib
+import asyncio
 import sys
 from pathlib import Path
 
@@ -45,3 +46,13 @@ def test_fastmcp_bind_host_can_be_overridden(monkeypatch):
     main = load_main(monkeypatch, bind_host="127.0.0.1")
 
     assert main.mcp.settings.host == "127.0.0.1"
+
+
+def test_fastmcp_registers_request_scoped_house_tool(monkeypatch):
+    main = load_main(monkeypatch)
+
+    tools = asyncio.run(main.mcp.list_tools())
+    names = [tool.name for tool in tools]
+
+    assert "yeelight_metadata.list_houses" in names
+    assert "yeelight_metadata.execute_task" in names

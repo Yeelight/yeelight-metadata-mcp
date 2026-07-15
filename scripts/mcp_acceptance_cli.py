@@ -146,11 +146,13 @@ def load_json_arg(value: str, default: Optional[Dict[str, Any]] = None) -> Dict[
     return data
 
 
-def auth_headers(token: str, house_id: str = "") -> Dict[str, str]:
+def auth_headers(token: str, house_id: str = "", region: str = "cn") -> Dict[str, str]:
     headers: Dict[str, str] = {}
     if not token:
         return headers
     headers["Authorization"] = token if token.startswith("Bearer ") else f"Bearer {token}"
+    if region:
+        headers["Yeelight-Region"] = region
     if house_id:
         headers["House-Id"] = house_id
     return headers
@@ -185,14 +187,15 @@ def content_item_to_plain(item: Any) -> Any:
 
 
 class MetadataMcpClient:
-    def __init__(self, url: str, token: str, house_id: str, timeout: float):
+    def __init__(self, url: str, token: str, house_id: str, timeout: float, region: str = ""):
         self.url = url
         self.token = token
         self.house_id = house_id
+        self.region = region
         self.timeout = timeout
 
     async def run_tool(self, tool_name: str, arguments: Optional[Dict[str, Any]] = None) -> Any:
-        headers = auth_headers(self.token, self.house_id)
+        headers = auth_headers(self.token, self.house_id, self.region)
         async with streamablehttp_client(self.url, headers=headers, timeout=self.timeout) as (read, write, _):
             async with ClientSession(read, write) as session:
                 await session.initialize()
@@ -200,7 +203,7 @@ class MetadataMcpClient:
                 return content_to_plain(result)
 
     async def list_tools(self) -> Any:
-        headers = auth_headers(self.token, self.house_id)
+        headers = auth_headers(self.token, self.house_id, self.region)
         async with streamablehttp_client(self.url, headers=headers, timeout=self.timeout) as (read, write, _):
             async with ClientSession(read, write) as session:
                 init_result = await session.initialize()
@@ -229,6 +232,10 @@ def build_execute_request(args: argparse.Namespace, dry_run_default: bool) -> Di
 
 async def cmd_tools(client: MetadataMcpClient, _args: argparse.Namespace) -> None:
     print_json(await client.list_tools())
+
+
+async def cmd_houses(client: MetadataMcpClient, _args: argparse.Namespace) -> None:
+    print_json(await client.run_tool("yeelight_metadata.list_houses", {}))
 
 
 async def cmd_tasks(client: MetadataMcpClient, args: argparse.Namespace) -> None:
@@ -523,6 +530,12 @@ def add_common_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--url", default=os.getenv("METADATA_MCP_URL", DEFAULT_URL), help="MCP Streamable HTTP 地址")
     parser.add_argument("--token", default=os.getenv("METADATA_MCP_ACCESS_TOKEN", ""), help="访问 token，建议使用 METADATA_MCP_ACCESS_TOKEN 环境变量")
     parser.add_argument("--house-id", default=os.getenv("METADATA_MCP_HOUSE_ID", ""), help="全局家庭 ID，会作为 House-Id Header 发送")
+    parser.add_argument(
+        "--region",
+        default=os.getenv("METADATA_MCP_REGION") or None,
+        choices=["cn", "sg", "us", "eu", "dev"],
+        help="可选账号 Region；省略时不发送 Yeelight-Region，由服务端使用部署默认值。dev 仅用于开发验证",
+    )
     parser.add_argument("--timeout", type=float, default=float(os.getenv("METADATA_MCP_CLIENT_TIMEOUT", "30")), help="HTTP 超时时间")
 
 
@@ -532,6 +545,7 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     subparsers.add_parser("tools", help="列出 MCP 工具")
+    subparsers.add_parser("houses", help="列出当前 Region 的 Pro 家庭")
 
     groups_parser = subparsers.add_parser("groups", help="列出任务分组")
     groups_parser.add_argument("--full", action="store_true", help="输出原始 JSON")
@@ -604,9 +618,10 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 async def run(args: argparse.Namespace) -> None:
-    client = MetadataMcpClient(args.url, args.token, args.house_id, args.timeout)
+    client = MetadataMcpClient(args.url, args.token, args.house_id, args.timeout, args.region)
     handlers = {
         "tools": cmd_tools,
+        "houses": cmd_houses,
         "groups": cmd_groups,
         "tasks": cmd_tasks,
         "describe": cmd_describe,

@@ -12,11 +12,12 @@
   "auth": {
     "type": "headers",
     "required": ["Authorization"],
-    "optional": ["Client-Id", "House-Id"]
+    "optional": ["Yeelight-Region", "House-Id"]
   },
   "capabilities": {
     "tools": [
       "yeelight_metadata.list_groups",
+      "yeelight_metadata.list_houses",
       "yeelight_metadata.list_tasks",
       "yeelight_metadata.list_actions",
       "yeelight_metadata.get_action_schema",
