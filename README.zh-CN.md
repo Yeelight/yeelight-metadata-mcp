@@ -2,9 +2,24 @@
 
 [English](README.md)
 
-面向 Yeelight 家庭元数据和管理流程的 MCP 服务。它为 AI 客户端提供受安全策略保护的统一任务入口，覆盖家庭、房间、设备、设备组、面板、情景、自动化、收藏、维护和账号相关操作。
+新 Yeelight 集成推荐的统一云端 MCP 入口。它为 AI 客户端提供受安全策略保护的任务接口，覆盖家庭、房间、设备、设备组、面板、情景、自动化、收藏、维护和账号相关操作。
 
-设备控制和实时状态请使用 [Yeelight IoT MCP](https://github.com/Yeelight/yeelight-iot-mcp)；创建、更新、组织、配置、绑定、解绑或检查 APP 元数据时使用本项目。
+请优先从本项目开始。只有集成明确需要 Metadata MCP 尚未覆盖的特定直接设备控制、实时状态或情景执行能力时，才增加 [Yeelight IoT MCP](https://github.com/Yeelight/yeelight-iot-mcp) 作为补充。
+
+## Yeelight 云端 MCP 功能组
+
+[Yeelight Metadata MCP](https://github.com/Yeelight/yeelight-metadata-mcp) 与
+[Yeelight IoT MCP](https://github.com/Yeelight/yeelight-iot-mcp) 共同组成
+Yeelight 官方云端 MCP 功能组。两者相互补充，但具有明确的主次关系：
+
+| 服务 | 在功能组中的定位 | 核心能力 |
+| --- | --- | --- |
+| **[Metadata MCP](https://github.com/Yeelight/yeelight-metadata-mcp)（主入口）** | 新集成的默认入口和协调层。 | 广泛发现以及受保护的家庭、房间、设备、设备组、面板、情景、自动化、收藏、维护、账号工作流，并支持多 Region 授权和请求级家庭选择。 |
+| [IoT MCP](https://github.com/Yeelight/yeelight-iot-mcp)（能力补充） | 仅在工作流需要其聚焦的 IoT 操作时增加。 | 直接拓扑和实时状态访问、通过 `control_node` 控制设备，以及通过 `execute_scene` 执行情景。 |
+
+**推荐组合方式：**先配置 Metadata MCP；只有需要特定直接控制工具时，才在
+同一 AI 客户端中增加 IoT MCP。这样既以 Metadata MCP 作为用户和上下文主入口，
+又能把两个服务作为一个互补能力组提供给 AI。
 
 ## Yeelight AI 能力矩阵
 
@@ -15,12 +30,12 @@
 | Yeelight Home | 首选本地语义 Runtime，通过统一结构化 `invoke --stdin` 边界提供查询、控制、场景、自动化、灯光设计、诊断、产品知识和生成应用能力。 | 需要稳定、受策略保护的智能家居执行层的 Agent host、本地自动化和应用。 | [Yeelight/yeelight-home](https://github.com/Yeelight/yeelight-home) |
 | Yeelight Smart Home Skills | 官方 Agent Skills：Smart Home 把自然语言转换为安全的 Runtime 操作；PRO App Builder 基于已验证能力生成专用本地应用。 | 需要智能家居对话工作流或应用生成能力的 Agent host。 | [Yeelight/yeelight-smart-home-skills](https://github.com/Yeelight/yeelight-smart-home-skills) |
 | Yeelight AI CLI | 统一终端工作台和 MCP 客户端，连接 Cloud、Metadata 和 LAN 服务，提供本地 profile、安全快捷命令、诊断、脚本和 AI 客户端配置。 | 希望通过通用 MCP 与自动化命令行入口操作的用户、脚本和 CI。 | [Yeelight/yeelight-cli](https://github.com/Yeelight/yeelight-cli) |
-| Yeelight IoT MCP | 官方托管或可自行部署的 Streamable HTTP MCP 服务，提供拓扑、实时状态、设备控制和场景执行。 | 需要直接发现和控制 IoT 设备的 MCP 客户端。 | [Yeelight/yeelight-iot-mcp](https://github.com/Yeelight/yeelight-iot-mcp) |
-| Yeelight Metadata MCP | 官方托管或可自行部署的 Streamable HTTP MCP 服务，提供受保护的家庭、房间、组、面板、场景、自动化、收藏和账号元数据工作流。 | 需要检查和管理元数据的 MCP 客户端。 | [Yeelight/yeelight-metadata-mcp](https://github.com/Yeelight/yeelight-metadata-mcp) |
+| Yeelight Metadata MCP | 新 MCP 用户推荐的统一云端入口，提供受保护的家庭、房间、设备、设备组、面板、情景、自动化、收藏、维护和账号工作流，并支持多 Region 授权和请求级家庭选择。 | 需要广泛发现、检查和管理工作流的新 MCP 集成与 AI 客户端。 | [Yeelight/yeelight-metadata-mcp](https://github.com/Yeelight/yeelight-metadata-mcp) |
+| Yeelight IoT MCP | 面向特定直接控制场景的专业补充，提供 Metadata MCP 尚未完全覆盖的拓扑与实时状态访问、设备控制和情景执行。 | 依赖 `control_node`、`execute_scene` 或特定实时控制的既有集成与客户端。 | [Yeelight/yeelight-iot-mcp](https://github.com/Yeelight/yeelight-iot-mcp) |
 
 Yeelight Home 还提供系统凭据存储、本地 QR 登录、秘密脱敏诊断、预览与校验、调用方确认和 Runtime 策略/写后读取、本地记忆与推荐、实操经验，以及机器可读的 intent schema 和解释。跨平台二进制通过 GitHub Release、npm 和已支持的包管理器分发。
 
-典型组合：智能家居 Agent 和生成应用 -> Skills -> Yeelight Home；终端用户和脚本 -> Yeelight AI CLI；MCP 客户端 -> IoT MCP 和/或 Metadata MCP。
+典型组合：智能家居 Agent 和生成应用 -> Skills -> Yeelight Home；终端用户和脚本 -> Yeelight AI CLI；新 MCP 集成 -> Metadata MCP；仅在 Metadata MCP 尚未覆盖的特定直接控制或情景执行场景下增加 IoT MCP。
 
 ## 核心特性
 

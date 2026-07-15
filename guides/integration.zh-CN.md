@@ -8,11 +8,12 @@
 
 | 用户意图 | 推荐服务 |
 | --- | --- |
-| 控制设备、读取实时状态、执行情景 | [Yeelight IoT MCP](https://github.com/Yeelight/yeelight-iot-mcp) |
-| 管理家庭、房间、设备、设备组、面板、情景或自动化 | Yeelight Metadata MCP |
+| 第一次接入 Yeelight MCP | Yeelight Metadata MCP |
+| 管理家庭、房间、设备、设备组、面板、情景、自动化、收藏、维护或账号 | Yeelight Metadata MCP |
+| Metadata MCP 尚未覆盖的特定直接控制、实时状态或情景执行 | 仅为该能力增加 [Yeelight IoT MCP](https://github.com/Yeelight/yeelight-iot-mcp) |
 | 使用网关本地发现或控制 | 本地网关暴露的 MCP 地址 |
 
-IoT MCP 和 Metadata MCP 可以同时配置。两者使用相同的云端 Header，但能力边界不同。
+请优先从 Metadata MCP 开始。只有集成明确需要 Metadata MCP 尚未暴露的特定直接控制能力时，才把 IoT MCP 作为专业补充。两者共同组成 Yeelight 云端 MCP 功能组，并始终以 Metadata MCP 作为用户和上下文主入口。
 
 ## 凭据和上下文
 
@@ -41,14 +42,6 @@ yeelight-ai client configure cursor --write --yes
 ```json
 {
   "mcpServers": {
-    "yeelight-iot": {
-      "url": "https://api.yeelight.com/apis/mcp_server/v1/mcp",
-      "headers": {
-        "Authorization": "<YOUR_AUTHORIZATION>",
-        "Yeelight-Region": "cn",
-        "House-Id": "<YOUR_HOUSE_ID>"
-      }
-    },
     "yeelight-metadata": {
       "url": "https://api.yeelight.com/apis/metadata_mcp_server/v1/mcp",
       "headers": {
@@ -61,7 +54,37 @@ yeelight-ai client configure cursor --write --yes
 }
 ```
 
-只保留当前工作流真正需要的服务即可。
+这是推荐的 Metadata-only 默认配置。只有工作流明确需要 IoT MCP 的特定直接控制能力时，才额外配置 IoT MCP。
+
+### 可选：增加 IoT MCP 作为能力补充
+
+需要直接实时状态访问、`control_node` 或 `execute_scene` 时，可在同一 AI 客户端中同时暴露两个服务：
+
+```json
+{
+  "mcpServers": {
+    "yeelight-metadata": {
+      "url": "https://api.yeelight.com/apis/metadata_mcp_server/v1/mcp",
+      "headers": {
+        "Authorization": "<YOUR_AUTHORIZATION>",
+        "Yeelight-Region": "cn",
+        "House-Id": "<YOUR_HOUSE_ID>"
+      }
+    },
+    "yeelight-iot": {
+      "url": "https://api.yeelight.com/apis/mcp_server/v1/mcp",
+      "headers": {
+        "Authorization": "<YOUR_AUTHORIZATION>",
+        "Client-Id": "<YOUR_CLIENT_ID>",
+        "House-Id": "<YOUR_HOUSE_ID>"
+      }
+    }
+  }
+}
+```
+
+家庭发现、上下文选择和广泛管理工作流交给 Metadata MCP；仅在调用聚焦工具时使用 IoT MCP。IoT MCP 当前具有独立的 Header 契约，详见
+[IoT MCP README](https://github.com/Yeelight/yeelight-iot-mcp#官方托管服务)。
 
 ## Claude Desktop 与 `mcp-remote`
 
