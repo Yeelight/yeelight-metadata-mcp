@@ -2,6 +2,15 @@
 
 [English](README.md)
 
+## 官方仓库与国内镜像
+
+[GitHub](https://github.com/Yeelight/yeelight-metadata-mcp) 是 Issue、贡献、CI
+和发布的规范源。国内无法稳定访问 GitHub 时，可使用只读的
+[Gitee 镜像](https://gitee.com/yeelight/yeelight-metadata-mcp) 或
+[GitCode 镜像](https://gitcode.com/Yeelight/yeelight-metadata-mcp)；
+[GitLab.com](https://gitlab.com/Yeelight/yeelight-metadata-mcp) 是额外的全球
+备用源。可以从任一可访问平台克隆代码，但请仍在 GitHub 提交 Issue 和贡献修改。
+
 新 Yeelight 集成推荐的统一云端 MCP 入口。它为 AI 客户端提供受安全策略保护的任务接口，覆盖家庭、房间、设备、设备组、面板、情景、自动化、收藏、维护和账号相关操作。
 
 请优先从本项目开始。只有集成明确需要 Metadata MCP 尚未覆盖的特定直接设备控制、实时状态或情景执行能力时，才增加 [Yeelight IoT MCP](https://github.com/Yeelight/yeelight-iot-mcp) 作为补充。

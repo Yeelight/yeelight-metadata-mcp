@@ -2,6 +2,17 @@
 
 [简体中文](README.zh-CN.md)
 
+## Official Repository And Mirrors
+
+[GitHub](https://github.com/Yeelight/yeelight-metadata-mcp) is the canonical
+source for issues, contributions, CI, and releases. Read-only mirrors are
+available on [Gitee](https://gitee.com/yeelight/yeelight-metadata-mcp) and
+[GitCode](https://gitcode.com/Yeelight/yeelight-metadata-mcp) for users who
+cannot reach GitHub reliably, with
+[GitLab.com](https://gitlab.com/Yeelight/yeelight-metadata-mcp) as an additional
+global fallback. Clone from any reachable source, but report issues and
+contribute changes on GitHub.
+
 The recommended primary cloud MCP for new Yeelight integrations. It gives AI
 clients a guarded task interface for homes, rooms, devices, device groups,
 panels, scenes, automations, favorites, maintenance, and account operations.
