@@ -2,6 +2,12 @@
 
 [English](usage.md) | [README](../README.zh-CN.md) | [接入指南](integration.zh-CN.md)
 
+仓库入口：[GitHub](https://github.com/Yeelight/yeelight-metadata-mcp) 是规范源；
+无法访问 GitHub 时可使用只读的
+[Gitee](https://gitee.com/yeelight/yeelight-metadata-mcp) 或
+[GitCode](https://gitcode.com/Yeelight/yeelight-metadata-mcp) 国内镜像，
+[GitLab.com](https://gitlab.com/Yeelight/yeelight-metadata-mcp) 是全球备用源。
+
 Metadata MCP 使用 `task + action + context + payload + options` 描述 APP 管理流程。发现类响应保持轻量，选定 action 后再读取精确 schema。
 
 ## 发现任务

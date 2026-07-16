@@ -2,6 +2,12 @@
 
 [English](integration.md) | [README](../README.zh-CN.md) | [使用指南](usage.zh-CN.md)
 
+仓库入口：[GitHub](https://github.com/Yeelight/yeelight-metadata-mcp) 是规范源；
+无法访问 GitHub 时可使用只读的
+[Gitee](https://gitee.com/yeelight/yeelight-metadata-mcp) 或
+[GitCode](https://gitcode.com/Yeelight/yeelight-metadata-mcp) 国内镜像，
+[GitLab.com](https://gitlab.com/Yeelight/yeelight-metadata-mcp) 是全球备用源。
+
 本文说明如何把 MCP 客户端连接到 Yeelight 官方远程或本地 Metadata MCP。工具名称和参数以运行时 `tools/list` 返回为准。
 
 ## 选择正确的 MCP

@@ -2,6 +2,14 @@
 
 [简体中文](usage.zh-CN.md) | [README](../README.md) | [Integration](integration.md)
 
+Repository access: [GitHub](https://github.com/Yeelight/yeelight-metadata-mcp)
+is canonical; use the read-only
+[Gitee](https://gitee.com/yeelight/yeelight-metadata-mcp) or
+[GitCode](https://gitcode.com/Yeelight/yeelight-metadata-mcp) mirror when GitHub
+is not reachable, with
+[GitLab.com](https://gitlab.com/Yeelight/yeelight-metadata-mcp) as a global
+fallback.
+
 Metadata MCP models application management as `task + action + context +
 payload + options`. Discovery responses stay compact; fetch the exact action
 schema only when an action is selected.
