@@ -82,10 +82,13 @@ Recommended optional headers:
 - `Yeelight-Region`: `cn`, `sg`, `us`, or `eu`; defaults to the deployment Region (`cn` by default)
 - `House-Id`
 
-`Authorization` is the only required user credential. Yeelight services derive
-the client identity from its verified authorization context. For actions that
-need a home, precedence is `context.houseId` -> `House-Id` -> first Pro home in
-the same Region. The fallback is request-scoped, not a global current-home state.
+`Authorization` is the only required user credential. When `Yeelight-Region` is
+absent, the server can use the JWT Region claim to select an official endpoint,
+then validates the complete token there. Yeelight services derive client identity
+from that verified authorization context; users never enter a Client ID. For
+actions that need a home, precedence is `context.houseId` -> `House-Id` -> first
+Pro home in the same Region. The fallback is request-scoped, not a global
+current-home state.
 
 ## MCP Capabilities
 
@@ -114,18 +117,21 @@ Treat the live MCP `tools/list` response as the source of truth for tool schemas
 
 ## Quick Start
 
-### Recommended: authorize with Yeelight AI CLI
+### Strongly recommended: authorize with Yeelight AI CLI
 
 ```bash
 npm install --global yeelight-ai
-yeelight-ai login --method qr --region cn
+yeelight-ai login --qr --region cn
 yeelight-ai client configure cursor --write --yes
 ```
 
-In Yeelight Pro APP, tap the `+` button in the top-right corner of Home, choose
-**MCP Authorization**, and scan the terminal QR code. The CLI saves the Region,
-Authorization, and selected home, then generates client configuration. The MCP
-server remains independently usable without the CLI.
+Install [Yeelight AI CLI](https://github.com/Yeelight/yeelight-cli) first. In
+Yeelight Pro APP, tap the `+` button in the top-right corner of Home, choose
+**MCP Authorization**, and scan the terminal QR code exactly as shown in
+[Figure 1](https://github.com/Yeelight/yeelight-cli#quick-start). The CLI saves
+the Region, Authorization, and selected home, then generates client
+configuration. Manual token configuration remains an advanced compatibility
+path; never paste a token into an AI chat.
 
 ### Connect to the hosted server
 
@@ -144,7 +150,8 @@ server remains independently usable without the CLI.
 }
 ```
 
-Both optional headers may be omitted. Match the endpoint host to the Region
+Both optional headers may be omitted. A JWT token supplies its Region claim;
+opaque tokens use the deployment default. Match an explicitly selected endpoint host to the Region
 (`api.yeelight.com`, `api-sg.yeelight.com`, `api-us.yeelight.com`, or
 `api-de.yeelight.com`). To switch homes, call `yeelight_metadata.list_houses`,
 then pass the chosen ID as `request.context.houseId` on subsequent calls.

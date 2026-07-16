@@ -1,4 +1,6 @@
 import asyncio
+import base64
+import json
 from pathlib import Path
 import sys
 
@@ -55,6 +57,14 @@ class Request:
     def __init__(self, headers):
         self.headers = Headers(headers)
         self.state = State()
+
+
+def fake_jwt(payload):
+    def encode(value):
+        raw = json.dumps(value, separators=(",", ":")).encode("utf-8")
+        return base64.urlsafe_b64encode(raw).decode("ascii").rstrip("=")
+
+    return f"{encode({'alg': 'none'})}.{encode(payload)}.signature"
 
 
 def test_token_validation_uses_request_region_base(monkeypatch):
@@ -126,3 +136,46 @@ def test_dispatch_rejects_unknown_region_before_token_validation():
 
     assert response.status_code == 400
     assert called is False
+
+
+def test_dispatch_uses_jwt_region_when_header_is_absent(monkeypatch):
+    middleware = object.__new__(AuthMiddleware)
+    validated = []
+
+    async def valid(token, api_base_url):
+        validated.append({"token": token, "api_base_url": api_base_url})
+        return True
+
+    middleware.check_token_valid = valid
+
+    async def call_next(request):
+        return request.state
+
+    token = fake_jwt({"region": "US", "client_id": "iot-platform"})
+    state = asyncio.run(middleware.dispatch(Request({"Authorization": token}), call_next))
+
+    assert state.region == "us"
+    assert state.api_base_url == "https://api-us.yeelight.com"
+    assert validated[0]["api_base_url"] == "https://api-us.yeelight.com"
+    assert not hasattr(state, "client_id")
+
+
+def test_dispatch_explicit_region_precedes_jwt_region():
+    middleware = object.__new__(AuthMiddleware)
+
+    async def valid(token, api_base_url):
+        return True
+
+    middleware.check_token_valid = valid
+
+    async def call_next(request):
+        return request.state
+
+    token = fake_jwt({"region": "US"})
+    state = asyncio.run(middleware.dispatch(
+        Request({"Authorization": token, "Yeelight-Region": "sg"}),
+        call_next,
+    ))
+
+    assert state.region == "sg"
+    assert state.api_base_url == "https://api-sg.yeelight.com"

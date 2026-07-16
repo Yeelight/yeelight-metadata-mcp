@@ -8,6 +8,10 @@
 [GitCode](https://gitcode.com/Yeelight/yeelight-metadata-mcp) 国内镜像，
 [GitLab.com](https://gitlab.com/Yeelight/yeelight-metadata-mcp) 是全球备用源。
 
+认证时强烈建议先安装 [Yeelight AI CLI](https://github.com/Yeelight/yeelight-cli)，运行
+`yeelight-ai login --qr`，然后在 Yeelight Pro APP 首页点击右上角 `+` ->
+**MCP 授权** 扫描终端二维码。手动 Token 配置仅作为高级兼容方式。
+
 Metadata MCP 使用 `task + action + context + payload + options` 描述 APP 管理流程。发现类响应保持轻量，选定 action 后再读取精确 schema。
 
 ## 发现任务

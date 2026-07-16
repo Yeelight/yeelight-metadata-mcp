@@ -40,23 +40,25 @@ House-Id: <YOUR_HOUSE_ID>
 ```
 
 The server accepts a raw token or a `Bearer` token and normalizes it internally.
-Region defaults to the deployment default (`cn` unless configured otherwise).
+Region precedence is explicit `Yeelight-Region`, JWT Region claim, then the
+deployment default (`cn` unless configured otherwise).
 When a selected action needs a home and `House-Id` is absent, the server chooses
 the first Pro home in the same Region. An explicit `context.houseId` always wins.
 Local IDs such as `roomId`, `deviceId`, and `groupId` belong in the tool request
 `context`.
 
-## Recommended QR Authorization
+## Strongly Recommended QR Authorization
 
 ```bash
 npm install --global yeelight-ai
-yeelight-ai login --method qr --region cn
+yeelight-ai login --qr --region cn
 yeelight-ai client configure cursor --write --yes
 ```
 
-In Yeelight Pro APP, tap Home's top-right `+`, choose **MCP Authorization**, and
-scan the terminal QR code. This is the recommended way to obtain and configure
-Region, Authorization, and a home. The server does not depend on the CLI.
+Install [Yeelight AI CLI](https://github.com/Yeelight/yeelight-cli) first. In
+Yeelight Pro APP, tap Home's top-right `+`, choose **MCP Authorization**, and
+scan the terminal QR code as shown in the CLI README's Figure 1. This is the
+recommended way to obtain and configure Region, Authorization, and a home.
 
 ## Cursor and Streamable HTTP Clients
 
@@ -98,7 +100,7 @@ expose both servers to the same AI client:
       "url": "https://api.yeelight.com/apis/mcp_server/v1/mcp",
       "headers": {
         "Authorization": "<YOUR_AUTHORIZATION>",
-        "Client-Id": "<YOUR_CLIENT_ID>",
+        "Yeelight-Region": "cn",
         "House-Id": "<YOUR_HOUSE_ID>"
       }
     }
@@ -107,8 +109,9 @@ expose both servers to the same AI client:
 ```
 
 Route discovery, context selection, and broad management through Metadata MCP;
-use IoT MCP only for its focused tools. IoT MCP currently has its own header
-contract, documented in the
+use IoT MCP only for its focused tools. Both servers accept Authorization-only
+client configuration; IoT derives any upstream client identity from the
+validated JWT. See the
 [IoT MCP README](https://github.com/Yeelight/yeelight-iot-mcp#hosted-service).
 
 ## Claude Desktop with `mcp-remote`

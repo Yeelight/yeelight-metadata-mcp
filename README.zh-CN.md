@@ -73,7 +73,11 @@ https://api.yeelight.com/apis/metadata_mcp_server/v1/mcp
 - `Yeelight-Region`：`cn`、`sg`、`us` 或 `eu`；缺省使用部署 Region（默认 `cn`）
 - `House-Id`
 
-用户唯一必需的凭据是 `Authorization`，可信 Yeelight 上游会从已验证的授权上下文解析客户端身份。需要家庭的 action 按 `context.houseId` -> `House-Id` -> 同 Region 首个 Pro 家庭的顺序选择；自动回退只作用于当前请求，不保存全局“当前家庭”。
+用户唯一必需的凭据是 `Authorization`。没有 `Yeelight-Region` 时，服务可先用 JWT
+中的 Region claim 选择官方端点，再由该端点验证完整 Token。可信 Yeelight 上游会从
+验证后的授权上下文解析客户端身份，用户不需要填写 Client ID。需要家庭的 action 按
+`context.houseId` -> `House-Id` -> 同 Region 首个 Pro 家庭的顺序选择；自动回退只
+作用于当前请求，不保存全局“当前家庭”。
 
 ## MCP 能力
 
@@ -102,15 +106,19 @@ Prompts：
 
 ## 快速开始
 
-### 推荐：使用 Yeelight AI CLI 扫码授权
+### 强烈推荐：使用 Yeelight AI CLI 扫码授权
 
 ```bash
 npm install --global yeelight-ai
-yeelight-ai login --method qr --region cn
+yeelight-ai login --qr --region cn
 yeelight-ai client configure cursor --write --yes
 ```
 
-在 Yeelight Pro APP 首页点击右上角 `+`，选择 **MCP 授权**，扫描终端二维码。CLI 会保存 Region、Authorization 和选中的家庭，并生成客户端配置。Metadata MCP 运行时不依赖 CLI，仍可独立配置。
+请先安装 [Yeelight AI CLI](https://github.com/Yeelight/yeelight-cli)。在 Yeelight Pro
+APP 首页点击右上角 `+`，选择 **MCP 授权**，按照 CLI README 的
+[图 1](https://github.com/Yeelight/yeelight-cli#快速开始) 扫描终端二维码。CLI 会保存
+Region、Authorization 和选中的家庭，并生成客户端配置。手动 Token 配置仅作为高级
+兼容路径；不要把 Token 粘贴到 AI 对话中。
 
 ### 连接官方远程服务
 
@@ -129,7 +137,11 @@ yeelight-ai client configure cursor --write --yes
 }
 ```
 
-两个可选 Header 都可以省略。端点 host 必须与 Region 对应：`api.yeelight.com`、`api-sg.yeelight.com`、`api-us.yeelight.com` 或 `api-de.yeelight.com`。切换家庭时先调用 `yeelight_metadata.list_houses`，后续请求在 `request.context.houseId` 中显式传入目标 ID。
+两个可选 Header 都可以省略。JWT Token 可提供 Region claim，opaque Token 使用部署
+默认 Region；显式选择端点时，host 必须与 Region 对应：`api.yeelight.com`、
+`api-sg.yeelight.com`、`api-us.yeelight.com` 或 `api-de.yeelight.com`。切换家庭时先
+调用 `yeelight_metadata.list_houses`，后续请求在 `request.context.houseId` 中显式传入
+目标 ID。
 
 Cursor、Claude Desktop、本地源码以及 IoT/Metadata 同时接入的完整配置见[接入指南](guides/integration.zh-CN.md)。
 

@@ -10,6 +10,11 @@ is not reachable, with
 [GitLab.com](https://gitlab.com/Yeelight/yeelight-metadata-mcp) as a global
 fallback.
 
+For authentication, strongly prefer installing
+[Yeelight AI CLI](https://github.com/Yeelight/yeelight-cli), running
+`yeelight-ai login --qr`, and scanning with Yeelight Pro APP Home's top-right
+`+` -> **MCP Authorization**. Manual token configuration is an advanced fallback.
+
 Metadata MCP models application management as `task + action + context +
 payload + options`. Discovery responses stay compact; fetch the exact action
 schema only when an action is selected.

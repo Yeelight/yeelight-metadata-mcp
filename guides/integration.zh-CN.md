@@ -31,17 +31,23 @@ Yeelight-Region: cn
 House-Id: <YOUR_HOUSE_ID>
 ```
 
-`Authorization` 可以是裸 token 或 `Bearer` token，服务会统一归一化。Region 缺省使用部署默认值（未配置时为 `cn`）。action 需要家庭且没有 `House-Id` 时，会自动选择同 Region 的首个 Pro 家庭；显式 `context.houseId` 始终优先。`roomId`、`deviceId`、`groupId` 等局部 ID 应放在具体工具请求的 `context` 中。
+`Authorization` 可以是裸 token 或 `Bearer` token，服务会统一归一化。Region 优先级为
+显式 `Yeelight-Region`、JWT Region claim、部署默认值（未配置时为 `cn`）。action 需要
+家庭且没有 `House-Id` 时，会自动选择同 Region 的首个 Pro 家庭；显式
+`context.houseId` 始终优先。`roomId`、`deviceId`、`groupId` 等局部 ID 应放在具体工具
+请求的 `context` 中。
 
-## 推荐扫码授权
+## 强烈推荐扫码授权
 
 ```bash
 npm install --global yeelight-ai
-yeelight-ai login --method qr --region cn
+yeelight-ai login --qr --region cn
 yeelight-ai client configure cursor --write --yes
 ```
 
-在 Yeelight Pro APP 首页点击右上角 `+`，选择 **MCP 授权**，扫描终端二维码。这是获取并配置 Region、Authorization 和家庭的推荐方式；Metadata MCP 本身不依赖 CLI。
+请先安装 [Yeelight AI CLI](https://github.com/Yeelight/yeelight-cli)。在 Yeelight Pro
+APP 首页点击右上角 `+`，选择 **MCP 授权**，按照 CLI README 的图 1 扫描终端二维码。
+这是获取并配置 Region、Authorization 和家庭的推荐方式。
 
 ## Cursor 与 Streamable HTTP 客户端
 
@@ -81,7 +87,7 @@ yeelight-ai client configure cursor --write --yes
       "url": "https://api.yeelight.com/apis/mcp_server/v1/mcp",
       "headers": {
         "Authorization": "<YOUR_AUTHORIZATION>",
-        "Client-Id": "<YOUR_CLIENT_ID>",
+        "Yeelight-Region": "cn",
         "House-Id": "<YOUR_HOUSE_ID>"
       }
     }
@@ -89,7 +95,9 @@ yeelight-ai client configure cursor --write --yes
 }
 ```
 
-家庭发现、上下文选择和广泛管理工作流交给 Metadata MCP；仅在调用聚焦工具时使用 IoT MCP。IoT MCP 当前具有独立的 Header 契约，详见
+家庭发现、上下文选择和广泛管理工作流交给 Metadata MCP；仅在调用聚焦工具时使用
+IoT MCP。两个服务的客户端配置都只需 Authorization；IoT 所需的上游客户端身份会从
+已验证 JWT 中派生。详见
 [IoT MCP README](https://github.com/Yeelight/yeelight-iot-mcp#官方托管服务)。
 
 ## Claude Desktop 与 `mcp-remote`

@@ -5,7 +5,7 @@ from starlette.responses import JSONResponse
 
 from config.config import settings
 from config.region import RegionError, api_base_for_region, resolve_region
-from utils.auth import normalize_authorization_header
+from utils.auth import extract_token_claims, normalize_authorization_header
 
 
 class AuthMiddleware(BaseHTTPMiddleware):
@@ -25,9 +25,10 @@ class AuthMiddleware(BaseHTTPMiddleware):
         token = request.headers.get(settings.AUTHORIZATION_HEADER_KEY)
         if not token:
             return JSONResponse({"error": "缺少或无效的 Token"}, status_code=401)
+        claims = extract_token_claims(token)
         try:
             region = resolve_region(
-                request.headers.get(settings.REGION_HEADER_KEY),
+                request.headers.get(settings.REGION_HEADER_KEY) or claims.region,
                 settings.DEFAULT_REGION,
             )
             api_base_url = api_base_for_region(
