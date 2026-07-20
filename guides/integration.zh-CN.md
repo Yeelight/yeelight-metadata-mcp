@@ -40,14 +40,11 @@ House-Id: <YOUR_HOUSE_ID>
 ## 强烈推荐扫码授权
 
 ```bash
-npm install --global yeelight-ai
-yeelight-ai login --qr --region cn
-yeelight-ai client configure cursor --write --yes
+npm install --global yeelight-home
+yeelight-home setup --lang zh-CN --mode mcp --agent cursor --mcp-source cloud --yes
 ```
 
-请先安装 [Yeelight AI CLI](https://github.com/Yeelight/yeelight-cli)。在 Yeelight Pro
-APP 首页点击右上角 `+`，选择 **MCP 授权**，按照 CLI README 的图 1 扫描终端二维码。
-这是获取并配置 Region、Authorization 和家庭的推荐方式。
+命令会显示二维码；请在 Yeelight Pro APP 首页点击右上角 `+`，选择 **MCP 授权**扫码。单家庭自动选择，多个家庭时才按名称询问。这是获取并配置 Region、Authorization 和家庭的推荐方式。
 
 ## Cursor 与 Streamable HTTP 客户端
 

@@ -50,15 +50,11 @@ Local IDs such as `roomId`, `deviceId`, and `groupId` belong in the tool request
 ## Strongly Recommended QR Authorization
 
 ```bash
-npm install --global yeelight-ai
-yeelight-ai login --qr --region cn
-yeelight-ai client configure cursor --write --yes
+npm install --global yeelight-home
+yeelight-home setup --lang en-US --mode mcp --agent cursor --mcp-source cloud --yes
 ```
 
-Install [Yeelight AI CLI](https://github.com/Yeelight/yeelight-cli) first. In
-Yeelight Pro APP, tap Home's top-right `+`, choose **MCP Authorization**, and
-scan the terminal QR code as shown in the CLI README's Figure 1. This is the
-recommended way to obtain and configure Region, Authorization, and a home.
+The command displays a QR code. In Yeelight Pro app Home, tap the top-right `+`, choose **MCP Authorization**, and scan it. One Pro home is selected automatically; multiple homes are presented by name. This is the recommended way to configure Region, Authorization, and a home.
 
 ## Cursor and Streamable HTTP Clients
 

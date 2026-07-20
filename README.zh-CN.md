@@ -30,21 +30,19 @@ Yeelight 官方云端 MCP 功能组。两者相互补充，但具有明确的主
 同一 AI 客户端中增加 IoT MCP。这样既以 Metadata MCP 作为用户和上下文主入口，
 又能把两个服务作为一个互补能力组提供给 AI。
 
-## Yeelight AI 能力矩阵
+## 在 Yeelight AI 中的位置
 
-这些项目组成互补的 Yeelight AI 技术栈。可以根据接入方式选择入口，也可以组合使用。
+[`yeelight-home`](https://github.com/Yeelight/yeelight-home) 是唯一安装、扫码和客户端配置入口。普通用户优先选择完整的 `yeelight-smart-home` Skill；客户端无法安装 Skill 时，本服务是推荐的云端轻量 MCP 主入口。只有需要 Metadata 尚未覆盖的实时控制或情景执行时，才增加 IoT MCP。
 
-| 项目 | 定位与核心能力 | 适用场景 | GitHub |
-| --- | --- | --- | --- |
-| Yeelight Home | 首选本地语义 Runtime，通过统一结构化 `invoke --stdin` 边界提供查询、控制、场景、自动化、灯光设计、诊断、产品知识和生成应用能力。 | 需要稳定、受策略保护的智能家居执行层的 Agent host、本地自动化和应用。 | [Yeelight/yeelight-home](https://github.com/Yeelight/yeelight-home) |
-| Yeelight Smart Home Skills | 官方 Agent Skills：Smart Home 把自然语言转换为安全的 Runtime 操作；PRO App Builder 基于已验证能力生成专用本地应用。 | 需要智能家居对话工作流或应用生成能力的 Agent host。 | [Yeelight/yeelight-smart-home-skills](https://github.com/Yeelight/yeelight-smart-home-skills) |
-| Yeelight AI CLI | 统一终端工作台和 MCP 客户端，连接 Cloud、Metadata 和 LAN 服务，提供本地 profile、安全快捷命令、诊断、脚本和 AI 客户端配置。 | 希望通过通用 MCP 与自动化命令行入口操作的用户、脚本和 CI。 | [Yeelight/yeelight-cli](https://github.com/Yeelight/yeelight-cli) |
-| Yeelight Metadata MCP | 新 MCP 用户推荐的统一云端入口，提供受保护的家庭、房间、设备、设备组、面板、情景、自动化、收藏、维护和账号工作流，并支持多 Region 授权和请求级家庭选择。 | 需要广泛发现、检查和管理工作流的新 MCP 集成与 AI 客户端。 | [Yeelight/yeelight-metadata-mcp](https://github.com/Yeelight/yeelight-metadata-mcp) |
-| Yeelight IoT MCP | 面向特定直接控制场景的专业补充，提供 Metadata MCP 尚未完全覆盖的拓扑与实时状态访问、设备控制和情景执行。 | 依赖 `control_node`、`execute_scene` 或特定实时控制的既有集成与客户端。 | [Yeelight/yeelight-iot-mcp](https://github.com/Yeelight/yeelight-iot-mcp) |
+用普通人的话说：本服务让只能使用 MCP 的 AI 有条理地看懂家庭，并通过受保护的
+方式管理家庭。它**不是**另一个 CLI，也不是 `yeelight-home` 或 Smart Home Skill
+的运行依赖。
 
-Yeelight Home 还提供系统凭据存储、本地 QR 登录、秘密脱敏诊断、预览与校验、调用方确认和 Runtime 策略/写后读取、本地记忆与推荐、实操经验，以及机器可读的 intent schema 和解释。跨平台二进制通过 GitHub Release、npm 和已支持的包管理器分发。
-
-典型组合：智能家居 Agent 和生成应用 -> Skills -> Yeelight Home；终端用户和脚本 -> Yeelight AI CLI；新 MCP 集成 -> Metadata MCP；仅在 Metadata MCP 尚未覆盖的特定直接控制或情景执行场景下增加 IoT MCP。
+| 适合选择本项目 | 更适合选择其他路线 |
+| --- | --- |
+| AI 客户端支持 MCP，但不能安装 Agent Skill。 | 客户端能安装 Skill：优先用 `yeelight-smart-home` 获得完整引导。 |
+| AI 需要理解房间、设备、设备组、情景、自动化、面板或家庭管理。 | 需要终端脚本或排障：直接使用 `yeelight-home`。 |
+| 想先接入 Yeelight 云端 MCP 主入口，再决定是否增加 IoT。 | 只为兼容既有 `control_node` 或 `execute_scene`：把 IoT MCP 作为补充。 |
 
 ## 核心特性
 
@@ -106,19 +104,14 @@ Prompts：
 
 ## 快速开始
 
-### 强烈推荐：使用 Yeelight AI CLI 扫码授权
+### 推荐：让 Yeelight Home 一次完成扫码和配置
 
 ```bash
-npm install --global yeelight-ai
-yeelight-ai login --qr --region cn
-yeelight-ai client configure cursor --write --yes
+npm install --global yeelight-home
+yeelight-home setup --lang zh-CN --mode mcp --agent cursor --mcp-source cloud --yes
 ```
 
-请先安装 [Yeelight AI CLI](https://github.com/Yeelight/yeelight-cli)。在 Yeelight Pro
-APP 首页点击右上角 `+`，选择 **MCP 授权**，按照 CLI README 的
-[图 1](https://github.com/Yeelight/yeelight-cli#快速开始) 扫描终端二维码。CLI 会保存
-Region、Authorization 和选中的家庭，并生成客户端配置。手动 Token 配置仅作为高级
-兼容路径；不要把 Token 粘贴到 AI 对话中。
+命令会主动显示二维码。请在 Yeelight Pro APP 首页点击右上角 `+`，选择 **MCP 授权**扫码。只有一个 Pro 家庭时会自动选择；多个家庭时才按名称询问。把 `cursor` 换成你的客户端，或使用 `--agent auto` 自动探测。生成的客户端配置只启动本机凭据代理，不包含 Authorization。手动 Token 配置仅作为高级兼容路径；不要把 Token 粘贴到 AI 对话中。
 
 ### 连接官方远程服务
 
