@@ -14,12 +14,12 @@
 
 | 用户意图 | 推荐服务 |
 | --- | --- |
-| 第一次接入 Yeelight MCP | Yeelight Metadata MCP |
+| 第一次接入 Yeelight MCP | 通过一次 setup 接入完整 Yeelight MCP |
 | 管理家庭、房间、设备、设备组、面板、情景、自动化、收藏、维护或账号 | Yeelight Metadata MCP |
-| Metadata MCP 尚未覆盖的特定直接控制、实时状态或情景执行 | 仅为该能力增加 [Yeelight IoT MCP](https://github.com/Yeelight/yeelight-iot-mcp) |
+| 特定直接控制、实时状态或情景执行 | 同一 Yeelight MCP setup 内的 [Yeelight IoT MCP](https://github.com/Yeelight/yeelight-iot-mcp) |
 | 使用网关本地发现或控制 | 本地网关暴露的 MCP 地址 |
 
-请优先从 Metadata MCP 开始。只有集成明确需要 Metadata MCP 尚未暴露的特定直接控制能力时，才把 IoT MCP 作为专业补充。两者共同组成 Yeelight 云端 MCP 功能组，并始终以 Metadata MCP 作为用户和上下文主入口。
+普通用户只运行一次 Yeelight MCP setup：Metadata MCP 提供家庭理解与管理，IoT MCP 提供实时状态与聚焦控制。两个服务仍独立部署，开发者可以分别定位其端点和工具。
 
 ## 凭据和上下文
 
@@ -58,27 +58,6 @@ yeelight-home setup --lang zh-CN --mode mcp --agent cursor --mcp-source cloud --
         "Yeelight-Region": "cn",
         "House-Id": "<YOUR_HOUSE_ID>"
       }
-    }
-  }
-}
-```
-
-这是推荐的 Metadata-only 默认配置。只有工作流明确需要 IoT MCP 的特定直接控制能力时，才额外配置 IoT MCP。
-
-### 可选：增加 IoT MCP 作为能力补充
-
-需要直接实时状态访问、`control_node` 或 `execute_scene` 时，可在同一 AI 客户端中同时暴露两个服务：
-
-```json
-{
-  "mcpServers": {
-    "yeelight-metadata": {
-      "url": "https://api.yeelight.com/apis/metadata_mcp_server/v1/mcp",
-      "headers": {
-        "Authorization": "<YOUR_AUTHORIZATION>",
-        "Yeelight-Region": "cn",
-        "House-Id": "<YOUR_HOUSE_ID>"
-      }
     },
     "yeelight-iot": {
       "url": "https://api.yeelight.com/apis/mcp_server/v1/mcp",
@@ -92,9 +71,10 @@ yeelight-home setup --lang zh-CN --mode mcp --agent cursor --mcp-source cloud --
 }
 ```
 
-家庭发现、上下文选择和广泛管理工作流交给 Metadata MCP；仅在调用聚焦工具时使用
-IoT MCP。两个服务的客户端配置都只需 Authorization；IoT 所需的上游客户端身份会从
-已验证 JWT 中派生。详见
+这是完整 Yeelight MCP 云端配置。推荐的 `yeelight-home setup` 会自动生成等价的
+本机凭据代理，普通用户不需要复制这些 Header 或手工分别配置服务。家庭发现、上下文
+选择和广泛管理交给 Metadata，聚焦实时状态与控制交给 IoT。两个服务都只需
+Authorization；IoT 所需的上游客户端身份会从已验证 JWT 中派生。详见
 [IoT MCP README](https://github.com/Yeelight/yeelight-iot-mcp#官方托管服务)。
 
 ## Claude Desktop 与 `mcp-remote`

@@ -17,15 +17,14 @@ server. Tool names and schemas returned by `tools/list` are authoritative.
 
 | Intent | Server |
 | --- | --- |
-| First Yeelight MCP integration | Yeelight Metadata MCP |
+| First Yeelight MCP integration | Complete Yeelight MCP suite through one setup |
 | Manage homes, rooms, devices, groups, panels, scenes, automations, favorites, maintenance, or accounts | Yeelight Metadata MCP |
-| Focused direct control, live state, or scene execution not yet covered by Metadata MCP | Add [Yeelight IoT MCP](https://github.com/Yeelight/yeelight-iot-mcp) only for that capability |
+| Focused direct control, live state, or scene execution | [Yeelight IoT MCP](https://github.com/Yeelight/yeelight-iot-mcp) inside the same Yeelight MCP setup |
 | Use gateway-local discovery or control | The MCP endpoint exposed by the local gateway |
 
-Start with Metadata MCP. IoT MCP can be configured as a focused companion when
-an integration specifically requires a direct-control capability that Metadata
-MCP does not yet expose. Together they form the Yeelight cloud MCP suite, with
-Metadata MCP remaining the primary user and context entry.
+Ordinary users run one Yeelight MCP setup. It configures Metadata MCP for home
+understanding and management plus IoT MCP for live state and focused control.
+The services remain independently deployed and addressable for developers.
 
 ## Credentials and Context
 
@@ -68,29 +67,6 @@ The command displays a QR code. In Yeelight Pro app Home, tap the top-right `+`,
         "Yeelight-Region": "cn",
         "House-Id": "<YOUR_HOUSE_ID>"
       }
-    }
-  }
-}
-```
-
-This Metadata-only configuration is the recommended default. Add IoT MCP only
-when the workflow requires one of its focused direct-control capabilities.
-
-### Optional: add IoT MCP as a companion
-
-When direct live-state access, `control_node`, or `execute_scene` is required,
-expose both servers to the same AI client:
-
-```json
-{
-  "mcpServers": {
-    "yeelight-metadata": {
-      "url": "https://api.yeelight.com/apis/metadata_mcp_server/v1/mcp",
-      "headers": {
-        "Authorization": "<YOUR_AUTHORIZATION>",
-        "Yeelight-Region": "cn",
-        "House-Id": "<YOUR_HOUSE_ID>"
-      }
     },
     "yeelight-iot": {
       "url": "https://api.yeelight.com/apis/mcp_server/v1/mcp",
@@ -104,8 +80,11 @@ expose both servers to the same AI client:
 }
 ```
 
-Route discovery, context selection, and broad management through Metadata MCP;
-use IoT MCP only for its focused tools. Both servers accept Authorization-only
+This is the complete Yeelight MCP cloud configuration. The recommended
+`yeelight-home setup` flow creates equivalent credential proxies automatically,
+so ordinary users do not copy these headers or configure the services by hand.
+Metadata handles discovery, context, and broad management; IoT handles its
+focused live-state and control tools. Both servers accept Authorization-only
 client configuration; IoT derives any upstream client identity from the
 validated JWT. See the
 [IoT MCP README](https://github.com/Yeelight/yeelight-iot-mcp#hosted-service).
