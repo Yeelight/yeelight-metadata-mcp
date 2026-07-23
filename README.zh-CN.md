@@ -13,6 +13,9 @@
 
 本仓库是 **Yeelight MCP** 内部负责家庭理解与管理的服务。普通用户只需一次接入完整 Yeelight MCP，不需要单独选择或安装本服务。它为 AI 提供受安全策略保护的任务接口，覆盖家庭、房间、设备、设备组、面板、情景、自动化、收藏、维护和账号相关操作。
 
+> [!TIP]
+> 第一次使用 Yeelight MCP？请跟随[中文官方教程](https://ai-tutorials.yeelight.com/zh/guides/yeelight-mcp/)，先准备 Yeelight Home，再一次接入 Metadata 与 IoT 完整能力并验证第一次真实响应。也可以查看 [English tutorial](https://ai-tutorials.yeelight.com/en/guides/yeelight-mcp/)。
+
 ## Yeelight 云端 MCP 功能组
 
 [Yeelight Metadata MCP](https://github.com/Yeelight/yeelight-metadata-mcp) 与

@@ -19,6 +19,9 @@ they do not choose or install this server separately. Its guarded task interface
 covers homes, rooms, devices, groups, panels, scenes, automations, favorites,
 maintenance, and account operations.
 
+> [!TIP]
+> New to Yeelight MCP? Follow the [official English Yeelight MCP tutorial](https://ai-tutorials.yeelight.com/en/guides/yeelight-mcp/) to prepare Yeelight Home, connect the complete Metadata and IoT capability suite, and verify the first real response. A [Simplified Chinese tutorial](https://ai-tutorials.yeelight.com/zh/guides/yeelight-mcp/) is also available.
+
 ## Yeelight Cloud MCP Suite
 
 [Yeelight Metadata MCP](https://github.com/Yeelight/yeelight-metadata-mcp) and
